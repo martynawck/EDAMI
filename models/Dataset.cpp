@@ -32,7 +32,7 @@ bool Dataset::PrecedingPoint(Point& preceding, Point point) const {
 
     vector<Point>::const_iterator it = find(points.begin(), points.end(), point);
     if (it != points.begin()) {
-        preceding = *it;
+        preceding = *(--it);
         return true;
     }
     return false;
@@ -41,7 +41,7 @@ bool Dataset::PrecedingPoint(Point& preceding, Point point) const {
 bool Dataset::FollowingPoint(Point& following, Point point) const {
     vector<Point>::const_iterator it = find(points.begin(), points.end(), point);
     if (it != points.end()) {
-        following = *it;
+        following = *(++it);
         return true;
     }
     return false;
@@ -58,11 +58,19 @@ void Dataset::sortPoints(){
 void Dataset::calculateRefPointDistance() {
 
     vector <double> vector1 (9, 0.0);
-    Point refPoint = Point(vector1);
+    referencePoint = Point(vector1);
     for (vector<Point>::iterator it = points.begin(); it != points.end(); ++it) {
-        double distance = refPoint.euclideanDistance(*it);
+        double distance = referencePoint.euclideanDistance(*it);
         it->setRefPointDistance(distance);
     }
+}
+
+const Point& Dataset::getReferencePoint() const {
+    return referencePoint;
+}
+
+void Dataset::setReferencePoint(const Point &referencePoint) {
+    Dataset::referencePoint = referencePoint;
 }
 
 

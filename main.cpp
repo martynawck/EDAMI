@@ -3,6 +3,7 @@
 #include <iostream>
 #include "DatasetReader.h"
 #include "models/Dataset.h"
+#include "NBC.h"
 
 using namespace std;
 
@@ -41,11 +42,10 @@ int main()
 
         points.push_back(Point(*it));
     }
-
     dataset.setPoints(points);
-    dataset.calculateRefPointDistance();
-    dataset.sortPoints();
 
+    NBC nbc = NBC();
+    nbc.TI_k_Neighbouthood_Index(dataset,1);
 
     cout<<dataset.getPointsSize()<<endl;
 

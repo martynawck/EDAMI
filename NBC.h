@@ -10,7 +10,10 @@
 
 class NBC {
 
-    void TI_k_Neighbouthood_Index(Dataset, int);
+public:
+    void TI_k_Neighbouthood_Index(Dataset&, int);
+
+private:
     set<Point> TI_k_Neighborhood(Dataset, Point, int);
     set <Point> Find_First_k_Candidate_Neighbours_Forward_and_Backward(Dataset, Point, Point, Point, bool, bool, bool, int, int);
     set <Point> Find_First_k_Candidate_Neighbours_Backward(Dataset, Point, Point, bool, bool, int, int);

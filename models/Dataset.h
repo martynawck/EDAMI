@@ -24,8 +24,11 @@ public :
     bool FollowingPoint(Point&, Point) const;
     void sortPoints();
     void calculateRefPointDistance();
+    const Point &getReferencePoint() const;
+    void setReferencePoint(const Point &referencePoint);
 
 private:
+    Point referencePoint;
     vector <Point> points;
     map <string, vector<Point>> clusters;
 
