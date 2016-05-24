@@ -6,6 +6,12 @@
 #include <algorithm>
 #include "Point.h"
 
+struct classcomp {
+    bool operator() (const Point& lhs, const Point& rhs) const {
+        return lhs.getDistance()< rhs.getDistance();
+    }
+};
+
 
 
 Point::Point (vector <double> values, int id) {
@@ -87,17 +93,48 @@ double Point::getEpsilon() {
 }
 
 
-double Point::euclideanDistance (Point point) const {
+double Point::calculateDistanceMeasure(Point point, int measure, double c) const {
 
     vector<double>::const_iterator itPoint = point.values.begin();
     double sum = 0;
-    for (vector<double>::const_iterator it = values.begin(); it != values.end(); ++it) {
+    double result = 0;
 
-        sum += pow((*it) - (*itPoint), 2.0);
-        ++itPoint;
+    switch (measure) {
+        case 1:
+            for (vector<double>::const_iterator it = values.begin(); it != values.end(); ++it) {
+
+                sum += pow((*it) - (*itPoint), 2.0);
+                ++itPoint;
+            }
+            result = sqrt(sum);
+            break;
+        case 2:
+            for (vector<double>::const_iterator it = values.begin(); it != values.end(); ++it) {
+
+                int res = (*it) - (*itPoint);
+                if (res < 0)
+                    res*=-1;
+                sum += res;
+                ++itPoint;
+            }
+            result = sum;
+            break;
+        case 3:
+            for (vector<double>::const_iterator it = values.begin(); it != values.end(); ++it) {
+
+                int res = pow((*it) - (*itPoint), c);
+                if (res < 0)
+                    res*=-1;
+                sum += res;
+                ++itPoint;
+            }
+            result = pow(sum, (1/c));
+            break;
     }
 
-    return sqrt(sum);
+
+
+    return result;
 }
 
 

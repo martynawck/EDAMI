@@ -38,13 +38,6 @@ vector<Point> NBC::TI_k_Neighborhood(Dataset dataset, Point& point, int k) {
     vector<Point> k_Neighbourhood = vector<Point>();
     int i = 0;
 
-    // k_Neighbourhood.push_back(f);
-    //  it->setKNeighbourhoodIndex(k_Neighbourhood);
-    //it->setKNeighbourhoodIndex(TI_k_Neighborhood(*dataset,*it, k));
-    //         Point thisPt = *it;
-//           thisPt.clearKNeighbourhood();
- //   int i = 0;
-
     Find_First_k_Candidate_Neighbours_Forward_and_Backward(dataset, point, b, f,
         backwardSearch, forwardSearch, k_Neighbourhood, k, i);
 
@@ -58,7 +51,7 @@ vector<Point> NBC::TI_k_Neighborhood(Dataset dataset, Point& point, int k) {
 
     double epsilon = -1;
     for (it = k_Neighbourhood.begin(); it != k_Neighbourhood.end(); it++) {
-        double distance = point.euclideanDistance(*it);
+        double distance = point.calculateDistanceMeasure(*it,dataset.getDistanceMeasure(),dataset.getCMinkowski());
         if (distance > epsilon)
             epsilon = distance;
 
@@ -86,14 +79,14 @@ void NBC::Find_First_k_Candidate_Neighbours_Forward_and_Backward(Dataset dataset
     while (forwardSearch && backwardSearch && i < k) {
         if (p.getDistance() - b.getDistance() -
                 f.getDistance() - p.getDistance()) {
-            b.setDistance(b.euclideanDistance(p));
+            b.setDistance(b.calculateDistanceMeasure(p,dataset.getDistanceMeasure(),dataset.getCMinkowski()));
             i++;
             k_Neighbourhood.push_back(b);
             sort(k_Neighbourhood.begin(), k_Neighbourhood.end(), cmp);
             backwardSearch = dataset.PrecedingPoint(b);
         }
         else {
-            f.setDistance(f.euclideanDistance(p));
+            f.setDistance(f.calculateDistanceMeasure(p,dataset.getDistanceMeasure(),dataset.getCMinkowski()));
             i++;
             k_Neighbourhood.push_back(f);
             sort(k_Neighbourhood.begin(), k_Neighbourhood.end(), cmp);
@@ -108,7 +101,7 @@ void NBC::Find_First_k_Candidate_Neighbours_Backward(Dataset dataset, Point p, P
 
                                                             vector<Point>& k_Neighbourhood, int k, int i) {
      while (backwardSearch && i < k) {
-         b.setDistance(p.euclideanDistance(b));
+         b.setDistance(p.calculateDistanceMeasure(b,dataset.getDistanceMeasure(),dataset.getCMinkowski()));
          i++;
          k_Neighbourhood.push_back(b);
          sort(k_Neighbourhood.begin(), k_Neighbourhood.end(), cmp);
@@ -118,7 +111,7 @@ void NBC::Find_First_k_Candidate_Neighbours_Backward(Dataset dataset, Point p, P
 void NBC::Find_First_k_Candidate_Neighbours_Forward (Dataset dataset, Point p, Point f, bool forwardSearch,
                                                                                    vector<Point>& k_Neighbourhood, int k, int i){
     while (forwardSearch && i < k) {
-        f.setDistance(p.euclideanDistance(f));
+        f.setDistance(p.calculateDistanceMeasure(f,dataset.getDistanceMeasure(), dataset.getCMinkowski()));
         i++;
         k_Neighbourhood.push_back(f);
         sort(k_Neighbourhood.begin(), k_Neighbourhood.end(), cmp);
@@ -128,7 +121,7 @@ void NBC::Find_First_k_Candidate_Neighbours_Forward (Dataset dataset, Point p, P
 void NBC::Verify_k_Candidate_Neighbours_Backward(Dataset dataset, Point p, Point b, bool backwardSearch,
                                                  vector<Point>& k_Neighbourhood, int k){
     while (backwardSearch && (p.getDistance() - b.getDistance() <= p.getEpsilon())) {
-        double distance = b.euclideanDistance(p);
+        double distance = b.calculateDistanceMeasure(p, dataset.getDistanceMeasure(), dataset.getCMinkowski());
         double epsil = p.getEpsilon();
         if (distance < p.getEpsilon()) {
             int i = 0;
@@ -147,6 +140,7 @@ void NBC::Verify_k_Candidate_Neighbours_Backward(Dataset dataset, Point p, Point
                 Point e = b;
                 e.setDistance(distance);
                 e.clearKNeighbourhood();
+                e.setId(b.getId());
                 k_Neighbourhood.push_back(e);
                 sort(k_Neighbourhood.begin(), k_Neighbourhood.end(), cmp);
 
@@ -160,6 +154,7 @@ void NBC::Verify_k_Candidate_Neighbours_Backward(Dataset dataset, Point p, Point
                 Point e = b;
                 e.setDistance(distance);
                 e.clearKNeighbourhood();
+                e.setId(b.getId());
                 k_Neighbourhood.push_back(e);
                 sort(k_Neighbourhood.begin(), k_Neighbourhood.end(), cmp);
 
@@ -180,7 +175,7 @@ void NBC::Verify_k_Candidate_Neihbours_Forward(Dataset dataset, Point p, Point f
                                                vector<Point>& k_Neighbourhood, int k) {
 
     while (forwardSearch && (f.getDistance() - p.getDistance() <= p.getEpsilon())) {
-        double distance = f.euclideanDistance(p);
+        double distance = f.calculateDistanceMeasure(p,dataset.getDistanceMeasure(),dataset.getCMinkowski());
         if (distance < p.getEpsilon()) {
             int i = 0;
             for (vector<Point>::iterator it = k_Neighbourhood.begin(); it!= k_Neighbourhood.end(); it++) {
