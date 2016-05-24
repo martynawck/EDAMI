@@ -14,12 +14,12 @@ public:
     void TI_k_Neighbouthood_Index(Dataset&, int);
 
 private:
-    set<Point> TI_k_Neighborhood(Dataset, Point, int);
-    set <Point> Find_First_k_Candidate_Neighbours_Forward_and_Backward(Dataset, Point, Point, Point, bool, bool, bool, int, int);
-    set <Point> Find_First_k_Candidate_Neighbours_Backward(Dataset, Point, Point, bool, bool, int, int);
-    set <Point> Find_First_k_Candidate_Neighbours_Forward (Dataset, Point, Point, bool, bool, int, int);
-    void Verify_k_Candidate_Neighbours_Backward(Dataset, Point,Point, bool, bool, int);
-    void Verify_k_Candidate_Neihbours_Forward(Dataset,Point,Point,bool,bool,int);
+    vector<Point> TI_k_Neighborhood(Dataset, Point&, int);
+    void Find_First_k_Candidate_Neighbours_Forward_and_Backward(Dataset, Point, Point, Point, bool, bool, vector<Point>&, int, int);
+    void Find_First_k_Candidate_Neighbours_Backward(Dataset, Point, Point, bool, vector<Point>&, int, int);
+    void Find_First_k_Candidate_Neighbours_Forward (Dataset, Point, Point, bool, vector<Point>&, int, int);
+    void Verify_k_Candidate_Neighbours_Backward(Dataset, Point,Point, bool, vector<Point>&, int);
+    void Verify_k_Candidate_Neihbours_Forward(Dataset,Point,Point,bool,vector<Point>&,int);
 };
 
 

@@ -16,13 +16,14 @@ class Dataset {
 public :
     Dataset();
     Dataset(vector<Point>);
-    vector<Point> getPoints();
+    vector<Point>& getPoints();
     void setPoints(vector<Point>);
     int getPointsSize();
-    map<string, vector<Point>> getClusters();
-    bool PrecedingPoint(Point&, Point) const;
-    bool FollowingPoint(Point&, Point) const;
+    map<string, vector<Point>>& getClusters();
+    bool PrecedingPoint(Point&) const;
+    bool FollowingPoint(Point&) const;
     void sortPoints();
+    int getPointIndex(Point p);
     void calculateRefPointDistance();
     const Point &getReferencePoint() const;
     void setReferencePoint(const Point &referencePoint);

@@ -6,13 +6,19 @@
 #include "Dataset.h"
 
 
-Dataset::Dataset() {}
+Dataset::Dataset() {
+    this->points = vector<Point>();
+    this->referencePoint = Point();
+    clusters = map<string,vector<Point>>();
+}
 
 Dataset::Dataset(vector<Point> points) {
     this->points = points;
+    this->referencePoint = Point();
+    clusters = map<string,vector<Point>>();
 }
 
-vector<Point> Dataset::getPoints() {
+vector<Point>& Dataset::getPoints() {
     return this->points;
 }
 
@@ -20,7 +26,7 @@ void Dataset::setPoints(vector<Point> points) {
     this->points = points;
 }
 
-map<string, vector<Point>> Dataset::getClusters() {
+map<string, vector<Point>>& Dataset::getClusters() {
     return this->clusters;
 };
 
@@ -28,27 +34,31 @@ int Dataset::getPointsSize() {
     return points.size();
 }
 
-bool Dataset::PrecedingPoint(Point& preceding, Point point) const {
+int Dataset::getPointIndex(Point p) {
+    return find(points.begin(), points.end(), p) - points.begin();
+}
+
+bool Dataset::PrecedingPoint(Point& point) const {
 
     vector<Point>::const_iterator it = find(points.begin(), points.end(), point);
     if (it != points.begin()) {
-        preceding = *(--it);
+        point = *(--it);
         return true;
     }
     return false;
 }
 
-bool Dataset::FollowingPoint(Point& following, Point point) const {
+bool Dataset::FollowingPoint(Point& point) const {
     vector<Point>::const_iterator it = find(points.begin(), points.end(), point);
-    if (it != points.end()) {
-        following = *(++it);
+    if (it != (points.end()-1)) {
+        point = *(++it);
         return true;
     }
     return false;
 }
 
 bool cmd(const Point &p1, const Point &p2) {
-    return p1.getRefPointDistance() < p2.getRefPointDistance();
+    return p1.getDistance() < p2.getDistance();
 }
 
 void Dataset::sortPoints(){
@@ -58,10 +68,10 @@ void Dataset::sortPoints(){
 void Dataset::calculateRefPointDistance() {
 
     vector <double> vector1 (9, 0.0);
-    referencePoint = Point(vector1);
+    referencePoint = Point(vector1,-1);
     for (vector<Point>::iterator it = points.begin(); it != points.end(); ++it) {
         double distance = referencePoint.euclideanDistance(*it);
-        it->setRefPointDistance(distance);
+        it->setDistance(distance);
     }
 }
 

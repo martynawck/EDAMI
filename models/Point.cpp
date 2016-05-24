@@ -3,15 +3,25 @@
 //
 
 #include <cmath>
+#include <algorithm>
 #include "Point.h"
 
-Point::Point (vector <double> values) {
+
+
+Point::Point (vector <double> values, int id) {
     this->values = values;
-    refPointDistance = 0;
+    this->dist = 0;
+    this->kNeighbourhoodIndex = vector<Point>();
+    this->epsilon = 0;
+    this->id = id;
 }
 
 Point::Point() {
-    refPointDistance = 0;
+    this->values = vector<double>();
+    this->dist = 0;
+    this->kNeighbourhoodIndex = vector<Point>();
+    this->epsilon = 0;
+    this->id = 0;
 }
 
 vector <double> Point::getAttributes() const {
@@ -22,34 +32,60 @@ void Point::setAttributes (vector <double> values ) {
     this->values = values;
 }
 
-set <Point> Point::getKNeighbourhoodIndex() const {
-    return kNeighbourhoodIndex;
+vector <Point>& Point::getKNeighbourhoodIndex()  {
+    return this->kNeighbourhoodIndex;
 }
 
 void Point::addPointToKNeighbourhoodIndex(Point p) {
-    std::set<Point>::iterator it;
-    it = kNeighbourhoodIndex.find(p);
-    if (it != kNeighbourhoodIndex.end())
-        kNeighbourhoodIndex.insert(p);
+
+ //   if (std::find(kNeighbourhoodIndex.begin(), kNeighbourhoodIndex.end(), p)
+   //     == kNeighbourhoodIndex.end())
+    Point p1 = p;
+    p1.clearKNeighbourhood();
+    kNeighbourhoodIndex.push_back(p1);
+}
+
+void Point::clearKNeighbourhood() {
+    this->kNeighbourhoodIndex.clear();
 }
 void Point::deletePointFromKNeighbourhoodIndex(Point p) {
-    std::set<Point>::iterator it;
-    it = kNeighbourhoodIndex.find(p);
+    std::vector<Point>::const_iterator it = find(kNeighbourhoodIndex.begin(), kNeighbourhoodIndex.end(), p);
     if (it != kNeighbourhoodIndex.end())
-        kNeighbourhoodIndex.erase(p);
+        kNeighbourhoodIndex.erase(it);
 }
 
 int Point::getSizeOfKNeighbourhoodIndex () const {
-    return kNeighbourhoodIndex.size();
+    return this->kNeighbourhoodIndex.size();
 }
 
-double Point::getRefPointDistance() const {
-    return refPointDistance;
+int Point::getId() {
+    return this->id;
 }
 
-void Point::setRefPointDistance(double refPointDistance) {
-    Point::refPointDistance = refPointDistance;
+void Point::setId( int id) {
+    this->id = id;
 }
+
+double Point::getDistance() const {
+    return this->dist;
+}
+
+void Point::setDistance(double distance) {
+    this->dist = distance;
+}
+
+void Point::setKNeighbourhoodIndex(vector<Point> kNeighbourhoodIndex) {
+    this->kNeighbourhoodIndex = kNeighbourhoodIndex;
+}
+
+void Point::setEpsilon(double epsilon) {
+    this->epsilon = epsilon;
+}
+
+double Point::getEpsilon() {
+    return this->epsilon;
+}
+
 
 double Point::euclideanDistance (Point point) const {
 
@@ -63,3 +99,5 @@ double Point::euclideanDistance (Point point) const {
 
     return sqrt(sum);
 }
+
+

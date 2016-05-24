@@ -29,25 +29,34 @@ int main()
 {
     DatasetReader datasetReader = DatasetReader();
 
-    vector<vector<string>> values = datasetReader.readDatasetFile("C:\\Users\\Martyna\\git\\EDAMI\\sponge.data");
-    vector<string> values1 = datasetReader.readAlgorithmParams("C:\\Users\\Martyna\\git\\EDAMI\\someParams.txt");
-    vector <string> values2 = datasetReader.readReferencePointParams("C:\\Users\\Martyna\\git\\EDAMI\\refPoint.txt");
     vector <vector<string>> data = datasetReader.readDatasetFile("C:\\Users\\Martyna\\git\\EDAMI\\fertility_Diagnosis.txt");
     vector<vector<double>> doubleData = intoDoubles(data);
 
     Dataset dataset = Dataset();
-    vector<Point> points;
-
+    vector<Point> points = vector<Point>();
+    int i =1;
     for (vector<vector<double>>::iterator it = doubleData.begin(); it!= doubleData.end(); ++it) {
 
-        points.push_back(Point(*it));
+        points.push_back(Point(*it,i));
+        i++;
     }
     dataset.setPoints(points);
+
+
 
     NBC nbc = NBC();
     nbc.TI_k_Neighbouthood_Index(dataset,1);
 
-    cout<<dataset.getPointsSize()<<endl;
+   // for (vector<Point>::iterator it = dataset.getPoints().begin(); it != dataset.getPoints().end(); ++it) {
+        //       it->setKNeighbourhoodIndex(TI_k_Neighborhood(dataset, (*it), k));
+     //   cout<<it->getDistance()<<endl;
+
+        //  cout<<indx<<endl;
+        //it->addPointToKNeighbourhoodIndex(dataset.getPointIndex(*it));
+        //it->addPointToKNeighbourhoodIndex();
+    //}
+
+    //cout<<dataset.getPointsSize()<<endl;
 
     return 0;
 
