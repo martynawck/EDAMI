@@ -419,3 +419,4 @@ ALL_BUILD.vcxproj
 *.sln
 ALL_BUILD.vcxproj.filters
 *.filters
+edami.cfg

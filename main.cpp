@@ -4,19 +4,19 @@
 #include "DatasetReader.h"
 #include "models/Dataset.h"
 #include "NBC.h"
+#include "utils\simpleini.h"
 
 using namespace std;
 
 
-
-vector<vector <double>> intoDoubles(vector<vector<string>> vec) {
+vector<vector<double>> intoDoubles(vector<vector<string>> vec) {
     vector<vector<double>> vectorx;
-    vector<vector<string> >::iterator it;
-    vector<string> ::iterator it2;
+    vector<vector<string>>::iterator it;
+    vector<string>::iterator it2;
 
     for(it = vec.begin();it!=vec.end();++it) {
         vector<double> vecd;
-        for(it2 = (*it).begin();it2!=(*it).end();++it2) {
+        for(it2 = (*it).begin(); it2 != (*it).end(); ++it2) {
             vecd.push_back(atof((*it2).c_str()));
         }
         vectorx.push_back(vecd);
@@ -26,27 +26,38 @@ vector<vector <double>> intoDoubles(vector<vector<string>> vec) {
 }
 
 int main()
-{
+ {
+	CSimpleIniA cfg;
+	cfg.LoadFile("edami.cfg");
+	cfg.SetUnicode();
+
+	const char* path = cfg.GetValue("nbc", "dataset", nullptr);
+	if (path == nullptr) {
+		cout << "Error while parsing configuration file";
+		return -1;
+	}
+
     DatasetReader datasetReader = DatasetReader();
 
-    vector <vector<string>> data = datasetReader.readDatasetFile("C:\\Users\\Martyna\\git\\EDAMI\\fertility_Diagnosis_quick.txt");
+    vector<vector<string>> data = datasetReader.readDatasetFile(path);
+
     vector<vector<double>> doubleData = intoDoubles(data);
 
     Dataset dataset = Dataset();
     dataset.setDistanceMeasure(1);
     vector<Point> points = vector<Point>();
     int i =1;
-    for (vector<vector<double>>::iterator it = doubleData.begin(); it!= doubleData.end(); ++it) {
-
-        points.push_back(Point(*it,i));
+    for (vector<vector<double>>::iterator it = doubleData.begin(); it != doubleData.end(); ++it) {
+        points.push_back(Point(*it, i));
         i++;
     }
     dataset.setPoints(points);
 
-
-
     NBC nbc = NBC();
-    nbc.TI_k_Neighbouthood_Index(dataset,1);
+    nbc.TI_k_Neighbouthood_Index(dataset, 1);
+
+	cin.sync();
+	cin.get();
 
     return 0;
 
