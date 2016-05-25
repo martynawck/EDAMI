@@ -1,9 +1,9 @@
 #include <algorithm>
 #include <fstream>
 #include <iostream>
-#include "DatasetReader.h"
+#include "utils/DatasetReader.h"
 #include "models/Dataset.h"
-#include "NBC.h"
+#include "algorithm/NBC.h"
 #include "utils\config.h"
 
 using namespace std;
@@ -29,11 +29,12 @@ int main()
  try {
 	Config cfg("edami.cfg");
 	string path = cfg.value<string>("nbc.dataset");
-	
+
     DatasetReader datasetReader = DatasetReader();
     vector<vector<string>> data = datasetReader.readDatasetFile(path);
     vector<vector<double>> doubleData = intoDoubles(data);
 
+	cout << doubleData.size() << endl;
     Dataset dataset = Dataset();
     dataset.setDistanceMeasure(1);
     vector<Point> points = vector<Point>();
@@ -44,7 +45,7 @@ int main()
     }
     dataset.setPoints(points);
 
-	NBC nbc = NBC();
+	NBC nbc;
     nbc.TI_k_Neighbouthood_Index(dataset, 1);
 
 	cin.sync();

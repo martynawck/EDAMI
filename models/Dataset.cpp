@@ -76,7 +76,7 @@ void Dataset::sortPoints(){
 
 void Dataset::calculateRefPointDistance() {
 
-    vector <double> vector1 (9, 0.0);
+    vector <double> vector1 (2, 0.0);
     referencePoint = Point(vector1,-1);
     for (vector<Point>::iterator it = points.begin(); it != points.end(); ++it) {
         double distance = referencePoint.calculateDistanceMeasure(*it,this->getDistanceMeasure(), this->getCMinkowski());

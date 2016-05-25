@@ -4,10 +4,10 @@ project(EDAMI)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 set(SOURCE_FILES main.cpp 
-DatasetReader.cpp DatasetReader.h 
+utils/DatasetReader.cpp utils/DatasetReader.h 
 models/Point.cpp models/Point.h 
 models/Dataset.cpp models/Dataset.h 
-NBC.cpp NBC.h 
-utils/simpleini.h)
+algorithm/NBC.cpp algorithm/NBC.h 
+utils/config.cpp utils/config.h)
 
 add_executable(EDAMI ${SOURCE_FILES})

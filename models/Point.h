@@ -15,12 +15,19 @@ class Point {
 
 public:
 
+    struct classcomp {
+        bool operator() (const Point& lhs, const Point& rhs) const
+        {return lhs.getDistance() <rhs.getDistance();}
+    };
+
+public:
+
     Point (vector <double>, int );
     Point();
     vector <double> getAttributes() const;
     void setAttributes (vector <double> );
-    vector <Point>& getKNeighbourhoodIndex();
-    void setKNeighbourhoodIndex(vector<Point>);
+    std::set<Point,classcomp>& getKNeighbourhoodIndex();
+    void setKNeighbourhoodIndex(std::set<Point, classcomp>);
     void addPointToKNeighbourhoodIndex(Point);
     void deletePointFromKNeighbourhoodIndex(Point);
     int getSizeOfKNeighbourhoodIndex () const;
@@ -54,11 +61,15 @@ public:
     }
 
 private:
+
+
+    std::set<Point, classcomp> kNeighbourhoodIndex;
     vector <double> values;
-    vector <Point> kNeighbourhoodIndex;
     double dist;
     double epsilon;
-    int id;
+    unsigned int id;
+
+
 
 };
 
