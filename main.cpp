@@ -1,12 +1,11 @@
 #include <algorithm>
 #include <fstream>
 #include <iostream>
-#include "DatasetReader.h"
+#include "utils/DatasetReader.h"
 #include "models/Dataset.h"
-#include "NBC.h"
+#include "algorithm/NBC.h"
 
 using namespace std;
-
 
 
 vector<vector <double>> intoDoubles(vector<vector<string>> vec) {
@@ -29,7 +28,7 @@ int main()
 {
     DatasetReader datasetReader = DatasetReader();
 
-    vector <vector<string>> data = datasetReader.readDatasetFile("C:\\Users\\Martyna\\git\\EDAMI\\fertility_Diagnosis_quick.txt");
+    vector <vector<string>> data = datasetReader.readDatasetFile("C:\\Users\\Martyna\\git\\EDAMIX\\data\\nbc.txt");
     vector<vector<double>> doubleData = intoDoubles(data);
 
     Dataset dataset = Dataset();

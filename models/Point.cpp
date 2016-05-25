@@ -6,18 +6,11 @@
 #include <algorithm>
 #include "Point.h"
 
-struct classcomp {
-    bool operator() (const Point& lhs, const Point& rhs) const {
-        return lhs.getDistance()< rhs.getDistance();
-    }
-};
-
-
 
 Point::Point (vector <double> values, int id) {
     this->values = values;
     this->dist = 0;
-    this->kNeighbourhoodIndex = vector<Point>();
+    this->kNeighbourhoodIndex = set<Point,classcomp>();
     this->epsilon = 0;
     this->id = id;
 }
@@ -25,7 +18,7 @@ Point::Point (vector <double> values, int id) {
 Point::Point() {
     this->values = vector<double>();
     this->dist = 0;
-    this->kNeighbourhoodIndex = vector<Point>();
+    this->kNeighbourhoodIndex = set<Point,classcomp>();
     this->epsilon = 0;
     this->id = 0;
 }
@@ -38,24 +31,22 @@ void Point::setAttributes (vector <double> values ) {
     this->values = values;
 }
 
-vector <Point>& Point::getKNeighbourhoodIndex()  {
+std::set<Point, Point::classcomp>& Point::getKNeighbourhoodIndex()  {
     return this->kNeighbourhoodIndex;
 }
 
 void Point::addPointToKNeighbourhoodIndex(Point p) {
 
- //   if (std::find(kNeighbourhoodIndex.begin(), kNeighbourhoodIndex.end(), p)
-   //     == kNeighbourhoodIndex.end())
     Point p1 = p;
     p1.clearKNeighbourhood();
-    kNeighbourhoodIndex.push_back(p1);
+    kNeighbourhoodIndex.insert(p1);
 }
 
 void Point::clearKNeighbourhood() {
     this->kNeighbourhoodIndex.clear();
 }
 void Point::deletePointFromKNeighbourhoodIndex(Point p) {
-    std::vector<Point>::const_iterator it = find(kNeighbourhoodIndex.begin(), kNeighbourhoodIndex.end(), p);
+    std::set<Point, classcomp>::const_iterator it = find(kNeighbourhoodIndex.begin(), kNeighbourhoodIndex.end(), p);
     if (it != kNeighbourhoodIndex.end())
         kNeighbourhoodIndex.erase(it);
 }
@@ -80,7 +71,7 @@ void Point::setDistance(double distance) {
     this->dist = distance;
 }
 
-void Point::setKNeighbourhoodIndex(vector<Point> kNeighbourhoodIndex) {
+void Point::setKNeighbourhoodIndex(std::set<Point, classcomp> kNeighbourhoodIndex) {
     this->kNeighbourhoodIndex = kNeighbourhoodIndex;
 }
 
