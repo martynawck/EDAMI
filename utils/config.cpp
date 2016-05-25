@@ -1,16 +1,23 @@
+#include <boost\property_tree\ini_parser.hpp>
+#include <iostream>
 #include "config.h"
 #include "error.h"
 
+using std::string;
 
-Config::Config(std::string const& config_file)
+Config::Config(string const& config_path)
 {
-	ini.LoadFile(config_file.c_str());
-	ini.SetUnicode();
+	boost::property_tree::ptree pt;
+	boost::property_tree::ini_parser::read_ini(config_path, pt);
+	for (auto const& section: pt) {
+		for (auto const& element: section.second) {
+			string key = section.first + "." + element.first;
+			values[key] = element.second.data();
+		}
+	}
 }
 
-const char * Config::read(std::string const& section, std::string const& field)
+const char* Config::read(std::string const& name)
 {
-	auto value = ini.GetValue(section.c_str(), field.c_str(), nullptr);
-	if (value == nullptr) throw Error("No config field does provide value: " + section + "/" + field);
-	return value;
+	return values.at(name).c_str();
 }

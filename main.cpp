@@ -28,26 +28,23 @@ vector<vector<double>> intoDoubles(vector<vector<string>> vec) {
 int main()
  try {
 	Config cfg("edami.cfg");
-
-	string path = cfg.value<string>("nbc", "dataset");
-
+	string path = cfg.value<string>("nbc.dataset");
+	
     DatasetReader datasetReader = DatasetReader();
-
     vector<vector<string>> data = datasetReader.readDatasetFile(path);
-
     vector<vector<double>> doubleData = intoDoubles(data);
 
     Dataset dataset = Dataset();
     dataset.setDistanceMeasure(1);
     vector<Point> points = vector<Point>();
-    int i =1;
+    int i = 1;
     for (vector<vector<double>>::iterator it = doubleData.begin(); it != doubleData.end(); ++it) {
         points.push_back(Point(*it, i));
         i++;
     }
     dataset.setPoints(points);
 
-    NBC nbc = NBC();
+	NBC nbc = NBC();
     nbc.TI_k_Neighbouthood_Index(dataset, 1);
 
 	cin.sync();
@@ -58,5 +55,7 @@ int main()
 }
 catch (exception& ex) {
 	cout << ex.what() << endl;
+	cin.sync();
+	cin.get();
 	return -1;
 }
