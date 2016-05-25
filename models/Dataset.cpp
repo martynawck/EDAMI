@@ -9,7 +9,8 @@
 Dataset::Dataset() {
     this->points = vector<Point>();
     this->referencePoint = Point();
-    clusters = map<string,vector<Point>>();
+    this->clusters = map<string,vector<Point>>();
+    this->cMinkowski = 0;
 }
 
 Dataset::Dataset(vector<Point> points) {
@@ -32,6 +33,14 @@ map<string, vector<Point>>& Dataset::getClusters() {
 
 int Dataset::getPointsSize() {
     return points.size();
+}
+
+int Dataset::getDistanceMeasure() {
+    return  this->distanceMeasure;
+}
+
+void Dataset::setDistanceMeasure(int measure) {
+    this->distanceMeasure = measure;
 }
 
 int Dataset::getPointIndex(Point p) {
@@ -70,9 +79,17 @@ void Dataset::calculateRefPointDistance() {
     vector <double> vector1 (9, 0.0);
     referencePoint = Point(vector1,-1);
     for (vector<Point>::iterator it = points.begin(); it != points.end(); ++it) {
-        double distance = referencePoint.euclideanDistance(*it);
+        double distance = referencePoint.calculateDistanceMeasure(*it,this->getDistanceMeasure(), this->getCMinkowski());
         it->setDistance(distance);
     }
+}
+
+double Dataset::getCMinkowski() {
+    return  this->cMinkowski;
+}
+
+void Dataset::setCMinkowski(double c) {
+    this->cMinkowski = c;
 }
 
 const Point& Dataset::getReferencePoint() const {

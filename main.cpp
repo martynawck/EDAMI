@@ -29,10 +29,11 @@ int main()
 {
     DatasetReader datasetReader = DatasetReader();
 
-    vector <vector<string>> data = datasetReader.readDatasetFile("C:\\Users\\Martyna\\git\\EDAMI\\fertility_Diagnosis.txt");
+    vector <vector<string>> data = datasetReader.readDatasetFile("C:\\Users\\Martyna\\git\\EDAMI\\fertility_Diagnosis_quick.txt");
     vector<vector<double>> doubleData = intoDoubles(data);
 
     Dataset dataset = Dataset();
+    dataset.setDistanceMeasure(1);
     vector<Point> points = vector<Point>();
     int i =1;
     for (vector<vector<double>>::iterator it = doubleData.begin(); it!= doubleData.end(); ++it) {
@@ -46,17 +47,6 @@ int main()
 
     NBC nbc = NBC();
     nbc.TI_k_Neighbouthood_Index(dataset,1);
-
-   // for (vector<Point>::iterator it = dataset.getPoints().begin(); it != dataset.getPoints().end(); ++it) {
-        //       it->setKNeighbourhoodIndex(TI_k_Neighborhood(dataset, (*it), k));
-     //   cout<<it->getDistance()<<endl;
-
-        //  cout<<indx<<endl;
-        //it->addPointToKNeighbourhoodIndex(dataset.getPointIndex(*it));
-        //it->addPointToKNeighbourhoodIndex();
-    //}
-
-    //cout<<dataset.getPointsSize()<<endl;
 
     return 0;
 

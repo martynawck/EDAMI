@@ -27,11 +27,17 @@ public :
     void calculateRefPointDistance();
     const Point &getReferencePoint() const;
     void setReferencePoint(const Point &referencePoint);
+    int getDistanceMeasure();
+    void setDistanceMeasure(int);
+    double getCMinkowski();
+    void setCMinkowski(double);
 
 private:
     Point referencePoint;
     vector <Point> points;
     map <string, vector<Point>> clusters;
+    int distanceMeasure;
+    double cMinkowski;
 
  };
 

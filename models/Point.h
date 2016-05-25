@@ -26,7 +26,7 @@ public:
     int getSizeOfKNeighbourhoodIndex () const;
     double getDistance() const;
     void setDistance(double refPointDistance);
-    double euclideanDistance (Point ) const;
+    double calculateDistanceMeasure(Point,int,double) const;
     double getEpsilon();
     void clearKNeighbourhood();
     void sortKNeighbours();
@@ -39,7 +39,7 @@ public:
         return (values < item.values);
     }
     bool operator==(const Point &item) const  {
-        return (values == item.values);
+        return (id == item.id);
     }
 
     Point& operator= (const Point& point) {
@@ -48,6 +48,7 @@ public:
         this->kNeighbourhoodIndex = point.kNeighbourhoodIndex;
         this->dist = point.dist;
         this->epsilon = point.epsilon;
+        this->id = point.id;
 
         return *this;
     }
