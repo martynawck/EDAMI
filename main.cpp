@@ -4,7 +4,7 @@
 #include "DatasetReader.h"
 #include "models/Dataset.h"
 #include "NBC.h"
-#include "utils\simpleini.h"
+#include "utils\config.h"
 
 using namespace std;
 
@@ -26,16 +26,10 @@ vector<vector<double>> intoDoubles(vector<vector<string>> vec) {
 }
 
 int main()
- {
-	CSimpleIniA cfg;
-	cfg.LoadFile("edami.cfg");
-	cfg.SetUnicode();
+ try {
+	Config cfg("edami.cfg");
 
-	const char* path = cfg.GetValue("nbc", "dataset", nullptr);
-	if (path == nullptr) {
-		cout << "Error while parsing configuration file";
-		return -1;
-	}
+	string path = cfg.value<string>("nbc", "dataset");
 
     DatasetReader datasetReader = DatasetReader();
 
@@ -61,4 +55,8 @@ int main()
 
     return 0;
 
+}
+catch (exception& ex) {
+	cout << ex.what() << endl;
+	return -1;
 }
