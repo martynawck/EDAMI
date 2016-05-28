@@ -7,19 +7,16 @@
 
 #include <array>
 #include <map>
+#include <memory>
 #include "Point.h"
 
-using namespace std;
 
 class Dataset {
 
-public :
-    Dataset();
-    Dataset(vector<Point>);
-    vector<Point>& getPoints();
-    void setPoints(vector<Point>);
+public:
+    std::vector<Point> getPoints();
+    void setPoints(std::vector<Point>);
     int getPointsSize();
-    map<string, vector<Point>>& getClusters();
     bool PrecedingPoint(Point&) const;
     bool FollowingPoint(Point&) const;
     void sortPoints();
@@ -32,13 +29,14 @@ public :
     double getCMinkowski();
     void setCMinkowski(double);
 
+	static auto readDatasetFile(std::string const& filename)->std::shared_ptr<Dataset>;
+
 private:
+	Dataset(std::vector<Point>);
     Point referencePoint;
-    vector <Point> points;
-    map <string, vector<Point>> clusters;
+    std::vector<Point> points;
     int distanceMeasure;
     double cMinkowski;
-
  };
 
 

@@ -4,8 +4,10 @@
 
 #include <cmath>
 #include <algorithm>
+#include "Cluster.h"
 #include "Point.h"
 
+using namespace std;
 
 Point::Point (vector <double> values, int id) {
     this->values = values;
@@ -42,6 +44,11 @@ void Point::addPointToKNeighbourhoodIndex(Point p) {
     kNeighbourhoodIndex.insert(p1);
 }
 
+void Point::appendReverseNeighbour(Point point)
+{
+	reverseNeighbourhood.insert(point);
+}
+
 void Point::clearKNeighbourhood() {
     this->kNeighbourhoodIndex.clear();
 }
@@ -61,6 +68,23 @@ int Point::getId() {
 
 void Point::setId( int id) {
     this->id = id;
+}
+
+double Point::ndf()
+{
+	double l = kNeighbourhoodIndex.size();
+	double r = reverseNeighbourhood.size();
+	return l / r;
+}
+
+bool Point::clustered()
+{
+	return cluster_id != -1;
+}
+
+void Point::clusterize(Cluster cluster)
+{
+	cluster_id = cluster.id();
 }
 
 double Point::getDistance() const {

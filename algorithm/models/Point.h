@@ -6,10 +6,11 @@
 #define EDAMI_POINT_H
 
 #include <array>
-#include <vector>
+#include <memory>
 #include <set>
+#include <vector>
 
-using namespace std;
+class Cluster;
 
 class Point {
 
@@ -21,26 +22,30 @@ public:
     };
 
 public:
-
-    Point (vector <double>, int );
-    Point();
-    vector <double> getAttributes() const;
-    void setAttributes (vector <double> );
+	Point();
+    Point(std::vector <double>, int=0);
+    std::vector<double> getAttributes() const;
+    void setAttributes (std::vector <double> );
     std::set<Point,classcomp>& getKNeighbourhoodIndex();
     void setKNeighbourhoodIndex(std::set<Point, classcomp>);
     void addPointToKNeighbourhoodIndex(Point);
+	void appendReverseNeighbour(Point);
     void deletePointFromKNeighbourhoodIndex(Point);
     int getSizeOfKNeighbourhoodIndex () const;
     double getDistance() const;
     void setDistance(double refPointDistance);
-    double calculateDistanceMeasure(Point,int,double) const;
+    double calculateDistanceMeasure(Point, int, double) const;
     double getEpsilon();
     void clearKNeighbourhood();
     void sortKNeighbours();
     void setEpsilon(double);
 
     int getId ();
-    void setId(int );
+    void setId(int);
+
+	double ndf();
+	bool clustered();
+	void clusterize(Cluster cluster);
 
     bool operator<(const Point &item) const {
         return (values < item.values);
@@ -64,13 +69,14 @@ private:
 
 
     std::set<Point, classcomp> kNeighbourhoodIndex;
-    vector <double> values;
+	std::set<Point> reverseNeighbourhood;
+
+    std::vector<double> values;
     double dist;
     double epsilon;
     unsigned int id;
 
-
-
+	int cluster_id = -1;
 };
 
 
