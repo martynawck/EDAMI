@@ -17,7 +17,7 @@ int main()
 	cout << "Enter the value of the point i normalized between 0 and 1:" << endl;
 	
 	cin >> Xi;
-	answer=(Xmax-Xmin)/(Xi-Xmin);
+	answer=(Xi-Xmin)/(Xmax-Xmin);
 	
 	cout << "Normalized value is" << answer << endl;
 	system("PAUSE");
