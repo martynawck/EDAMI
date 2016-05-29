@@ -6,8 +6,8 @@
 using namespace std;
 int main()
 {
-	double Xmax= 0.1;
-	double Xmin= 0.1;
+	double Xmax= 0.0;
+	double Xmin= 0.0;
 	double Xi= 8;
 	double answer;
 	cout << "Enter the max value:!" << endl;
