@@ -19,7 +19,7 @@ int main()
 	cin >> Xi;
 	X=(Xi-Xmin)/(Xmax-Xmin);
 	
-	cout << "Normalized value is" << answer << endl;
+	cout << "Normalized value is" << X << endl;
 	system("PAUSE");
 	return 0;
 }
