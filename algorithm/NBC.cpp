@@ -8,12 +8,13 @@
 #include "NBC.h"
 
 using std::vector;
+using namespace std;
 
-void Find_First_k_Candidate_Neighbours_Forward_and_Backward(Dataset dataset, Point p, Point b,
-                                                                        Point f, bool backwardSearch, bool forwardSearch,
-                                                                 std::set<Point, Point::classcomp>& k_Neighbourhood, int k, int i) {
+void Find_First_k_Candidate_Neighbours_Forward_and_Backward(Dataset dataset, Point& p, Point& b,
+                                                                        Point& f, bool& backwardSearch, bool& forwardSearch,
+                                                                 std::set<Point, Point::classcomp>& k_Neighbourhood, int k, int& i) {
     while (forwardSearch && backwardSearch && i < k) {
-        if (p.getDistance() - b.getDistance() -
+        if (p.getDistance() - b.getDistance() <
                 f.getDistance() - p.getDistance()) {
             Point e = b;
             e.setDistance(b.calculateDistanceMeasure(p,dataset.getDistanceMeasure(),dataset.getCMinkowski()));
@@ -33,8 +34,8 @@ void Find_First_k_Candidate_Neighbours_Forward_and_Backward(Dataset dataset, Poi
 }
 
 
-void Find_First_k_Candidate_Neighbours_Backward(Dataset dataset, Point p, Point b, bool backwardSearch,
-                                                     std::set<Point, Point::classcomp>& k_Neighbourhood, int k, int i) {
+void Find_First_k_Candidate_Neighbours_Backward(Dataset dataset, Point& p, Point& b, bool& backwardSearch,
+                                                     std::set<Point, Point::classcomp>& k_Neighbourhood, int k, int& i) {
      while (backwardSearch && i < k) {
          Point e = b;
          e.setDistance(b.calculateDistanceMeasure(p,dataset.getDistanceMeasure(),dataset.getCMinkowski()));
@@ -43,8 +44,8 @@ void Find_First_k_Candidate_Neighbours_Backward(Dataset dataset, Point p, Point 
          backwardSearch = dataset.PrecedingPoint(b);
     }
 }
-void Find_First_k_Candidate_Neighbours_Forward (Dataset dataset, Point p, Point f, bool forwardSearch,
-                                                     std::set<Point, Point::classcomp>& k_Neighbourhood, int k, int i){
+void Find_First_k_Candidate_Neighbours_Forward (Dataset dataset, Point& p, Point& f, bool& forwardSearch,
+                                                     std::set<Point, Point::classcomp>& k_Neighbourhood, int k, int& i){
     while (forwardSearch && i < k) {
         Point e = f;
         e.setDistance(f.calculateDistanceMeasure(p,dataset.getDistanceMeasure(), dataset.getCMinkowski()));
@@ -53,10 +54,11 @@ void Find_First_k_Candidate_Neighbours_Forward (Dataset dataset, Point p, Point 
         forwardSearch = dataset.FollowingPoint(f);
     }
 }
-void Verify_k_Candidate_Neighbours_Backward(Dataset dataset, Point p, Point b, bool backwardSearch,
+void Verify_k_Candidate_Neighbours_Backward(Dataset dataset, Point& p, Point& b, bool& backwardSearch,
                                                  std::set<Point, Point::classcomp>& k_Neighbourhood, int k){
     while (backwardSearch && (p.getDistance() - b.getDistance() <= p.getEpsilon())) {
         double distance = b.calculateDistanceMeasure(p, dataset.getDistanceMeasure(), dataset.getCMinkowski());
+
         if (distance < p.getEpsilon()) {
             int i = 0;
             for (std::set<Point, Point::classcomp>::iterator it = k_Neighbourhood.begin(); it!= k_Neighbourhood.end(); it++) {
@@ -79,19 +81,15 @@ void Verify_k_Candidate_Neighbours_Backward(Dataset dataset, Point p, Point b, b
                 e.setDistance(distance);
                 k_Neighbourhood.insert(e);
 
-                int max_dist = 0;
-                for (std::set<Point, Point::classcomp>::iterator it = k_Neighbourhood.begin(); it!= k_Neighbourhood.end(); it++) {
-                    if (it->getDistance() > max_dist)
-                        max_dist = it->getDistance();
-                }
-                p.setEpsilon(max_dist);
+                p.setEpsilon(p.calculateDistanceMeasure(*(--k_Neighbourhood.end()),dataset.getDistanceMeasure(),dataset.getCMinkowski()));
+
             } else {
                 Point e = b;
                 e.setDistance(distance);
                 k_Neighbourhood.insert(e);
             }
 
-        } else if(distance == p.getEpsilon()) {
+        } else if(abs (distance - p.getEpsilon()) < MIN_DIFFERENCE) {
             Point e = b;
             e.setDistance(distance);
             k_Neighbourhood.insert(e);
@@ -99,9 +97,8 @@ void Verify_k_Candidate_Neighbours_Backward(Dataset dataset, Point p, Point b, b
         backwardSearch = dataset.PrecedingPoint(b);
     }
 }
-void Verify_k_Candidate_Neihbours_Forward(Dataset dataset, Point p, Point f, bool forwardSearch,
+void Verify_k_Candidate_Neihbours_Forward(Dataset dataset, Point& p, Point& f, bool& forwardSearch,
                                                std::set<Point,Point::classcomp>& k_Neighbourhood, int k) {
-
     while (forwardSearch && (f.getDistance() - p.getDistance() <= p.getEpsilon())) {
         double distance = f.calculateDistanceMeasure(p,dataset.getDistanceMeasure(),dataset.getCMinkowski());
         if (distance < p.getEpsilon()) {
@@ -112,7 +109,6 @@ void Verify_k_Candidate_Neihbours_Forward(Dataset dataset, Point p, Point f, boo
             }
 
             if (k_Neighbourhood.size() - i >= k - 1) {
-
                 for (std::set<Point, Point::classcomp>::iterator it = k_Neighbourhood.begin(); it!= k_Neighbourhood.end(); ) {
                     if (p.getEpsilon() == it->getDistance()) {
                         it = k_Neighbourhood.erase(it);
@@ -125,19 +121,16 @@ void Verify_k_Candidate_Neihbours_Forward(Dataset dataset, Point p, Point f, boo
                 e.setDistance(distance);
                 k_Neighbourhood.insert(e);
 
-                int max_dist = 0;
-                for (std::set<Point, Point::classcomp>::iterator it = k_Neighbourhood.begin(); it!= k_Neighbourhood.end(); it++) {
-                    if (it->getDistance() > max_dist)
-                        max_dist = it->getDistance();
-                }
-                p.setEpsilon(max_dist);
+                p.setEpsilon(p.calculateDistanceMeasure(*(--k_Neighbourhood.end()),dataset.getDistanceMeasure(),dataset.getCMinkowski()));
+
+
             } else {
                 Point e = f;
                 e.setDistance(distance);
                 k_Neighbourhood.insert(e);
             }
 
-        } else if(distance == p.getEpsilon()) {
+        } else if(abs (distance - p.getEpsilon()) < MIN_DIFFERENCE) {
             Point e = f;
             e.setDistance(distance);
             k_Neighbourhood.insert(e);
@@ -146,7 +139,7 @@ void Verify_k_Candidate_Neihbours_Forward(Dataset dataset, Point p, Point f, boo
     }
 }
 
-std::set<Point, Point::classcomp> TI_k_Neighborhood(Dataset dataset, Point& point, int k) {
+std::set<Point, Point::classcomp> TI_k_Neighborhood(Dataset dataset, Point point, int k) {
 	Point b = point;
 	Point f = point;
 	// search for preceding and following points
@@ -163,16 +156,9 @@ std::set<Point, Point::classcomp> TI_k_Neighborhood(Dataset dataset, Point& poin
 	Find_First_k_Candidate_Neighbours_Forward(dataset, point, f, forwardSearch, k_Neighbourhood, k, i);
 
 	// find epsilon for point -> max of the distances of its neighbours
-	double epsilon = -1;
-	for (std::set<Point, Point::classcomp>::iterator it = k_Neighbourhood.begin(); it != k_Neighbourhood.end(); it++) {
-		double distance = point.calculateDistanceMeasure(*it, dataset.getDistanceMeasure(), dataset.getCMinkowski());
-		if (distance > epsilon)
-			epsilon = distance;
+    point.setEpsilon(point.calculateDistanceMeasure(*(--k_Neighbourhood.end()),dataset.getDistanceMeasure(),dataset.getCMinkowski()));
 
-	}
-	point.setEpsilon(epsilon);
-
-	//verify candidates
+    //verify candidates
 	Verify_k_Candidate_Neighbours_Backward(dataset, point, b, backwardSearch, k_Neighbourhood, k);
 	Verify_k_Candidate_Neihbours_Forward(dataset, point, f, forwardSearch, k_Neighbourhood, k);
 
@@ -189,10 +175,12 @@ vector<Point> TI_k_Neighbourhood_Index(Dataset& dataset, int k) {
     // for each point in the dataset
    for (Point& point: dataset.getPoints()) {
        try {
+
            // insert this set into its neighbourhood list
 		   auto neighbours = TI_k_Neighborhood(dataset, point, k);
 		   point.setKNeighbourhoodIndex(neighbours);
-		   for (std::set<Point, Point::classcomp>::iterator it = neighbours.begin(); it != neighbours.end(); it++) {
+
+           for (std::set<Point, Point::classcomp>::iterator it = neighbours.begin(); it != neighbours.end(); it++) {
 			   auto neighbour = *it;
 			   neighbour.appendReverseNeighbour(point);
 		   }
