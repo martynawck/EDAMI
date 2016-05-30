@@ -106,7 +106,7 @@ double Point::getEpsilon() {
 }
 
 
-double Point::calculateDistanceMeasure(Point point, int measure, double c) const {
+double Point::calculateDistanceMeasure(Point const& point, int measure, double c) const {
 
     vector<double>::const_iterator itPoint = point.values.begin();
     double sum = 0;

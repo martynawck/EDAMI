@@ -34,7 +34,7 @@ public:
     int getSizeOfKNeighbourhoodIndex () const;
     double getDistance() const;
     void setDistance(double refPointDistance);
-    double calculateDistanceMeasure(Point, int, double) const;
+    double calculateDistanceMeasure(Point const&, int, double) const;
     double getEpsilon();
     void clearKNeighbourhood();
     void sortKNeighbours();
