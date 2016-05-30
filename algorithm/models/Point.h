@@ -33,7 +33,7 @@ public:
     void deletePointFromKNeighbourhoodIndex(std::shared_ptr<Point>);
     int getSizeOfKNeighbourhoodIndex () const;
     double getDistance() const;
-    void setDistance(double refPointDistance);
+    void setDistance(double);
     double calculateDistanceMeasure(Point const&, int, double) const;
     double getEpsilon();
     void clearKNeighbourhood();
@@ -42,6 +42,8 @@ public:
 
     int getId ();
     void setId(int);
+	double getDistanceFromReference() const;
+	void setDistanceFromReference(double);
 
 	double ndf();
 	bool clustered();
@@ -61,6 +63,7 @@ private:
 
     std::vector<double> values;
     double dist;
+	double distanceFromReference;
     double epsilon;
     unsigned int id;
 

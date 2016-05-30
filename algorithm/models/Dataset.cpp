@@ -9,6 +9,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <iterator>
 #include "Dataset.h"
 
 using std::map;
@@ -85,9 +86,13 @@ void Dataset::sortPoints(){
 
 void Dataset::calculateRefPointDistance() {
     vector<std::tuple<Point, double>> result;
+
+	// HARD CODED REFERENCE POINT
+	/*vector <double> vector1 (2, 0.0);
+	referencePoint = Point(vector1,-1);*/
 	for (auto it = points.begin(); it != points.end(); ++it) {
 		double distance = referencePoint.calculateDistanceMeasure(*(it->get()), this->getDistanceMeasure(), this->getCMinkowski());
-		it->get()->setDistance(distance);
+		it->get()->setDistanceFromReference(distance);
 	}
 }
 

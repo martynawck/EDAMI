@@ -240,10 +240,10 @@ enum SI_Error {
 	SI_UPDATED = 1,   //!< An existing value was updated
 	SI_INSERTED = 2,   //!< A new value was inserted
 
-					   // note: test for any error with (retval < 0)
-					   SI_FAIL = -1,   //!< Generic failure
-					   SI_NOMEM = -2,   //!< Out of memory error
-					   SI_FILE = -3    //!< File error (see errno for detail error)
+	// note: test for any error with (retval < 0)
+			SI_FAIL = -1,   //!< Generic failure
+	SI_NOMEM = -2,   //!< Out of memory error
+	SI_FILE = -3    //!< File error (see errno for detail error)
 };
 
 #define SI_UTF8_SIGNATURE     "\xEF\xBB\xBF"
@@ -305,14 +305,14 @@ public:
 		int             nOrder;
 
 		Entry(const SI_CHAR * a_pszItem = NULL, int a_nOrder = 0)
-			: pItem(a_pszItem)
-			, pComment(NULL)
-			, nOrder(a_nOrder)
+				: pItem(a_pszItem)
+				, pComment(NULL)
+				, nOrder(a_nOrder)
 		{ }
 		Entry(const SI_CHAR * a_pszItem, const SI_CHAR * a_pszComment, int a_nOrder)
-			: pItem(a_pszItem)
-			, pComment(a_pszComment)
-			, nOrder(a_nOrder)
+				: pItem(a_pszItem)
+				, pComment(a_pszComment)
+				, nOrder(a_nOrder)
 		{ }
 		Entry(const Entry & rhs) { operator=(rhs); }
 		Entry & operator=(const Entry & rhs) {
@@ -434,9 +434,9 @@ public:
 				m_scratch.resize(m_scratch.size() * 2);
 			}
 			return SI_CONVERTER::ConvertToStore(
-				a_pszString,
-				const_cast<char*>(m_scratch.data()),
-				m_scratch.size());
+					a_pszString,
+					const_cast<char*>(m_scratch.data()),
+					m_scratch.size());
 		}
 		const char * Data() { return m_scratch.data(); }
 	private:
@@ -453,9 +453,9 @@ public:
 	@param a_bMultiLine  See the method SetMultiLine() for details.
 	*/
 	CSimpleIniTempl(
-		bool a_bIsUtf8 = false,
-		bool a_bMultiKey = false,
-		bool a_bMultiLine = false
+			bool a_bIsUtf8 = false,
+			bool a_bMultiKey = false,
+			bool a_bMultiLine = false
 	);
 
 	/** Destructor */
@@ -556,7 +556,7 @@ public:
 	@return SI_Error    See error definitions
 	*/
 	SI_Error LoadFile(
-		const char * a_pszFile
+			const char * a_pszFile
 	);
 
 #ifdef SI_HAS_WIDE_FILE
@@ -567,7 +567,7 @@ public:
 	@return SI_Error    See error definitions
 	*/
 	SI_Error LoadFile(
-		const SI_WCHAR_T * a_pwszFile
+			const SI_WCHAR_T * a_pwszFile
 	);
 #endif // SI_HAS_WIDE_FILE
 
@@ -579,7 +579,7 @@ public:
 	@return SI_Error    See error definitions
 	*/
 	SI_Error LoadFile(
-		FILE * a_fpFile
+			FILE * a_fpFile
 	);
 
 #ifdef SI_SUPPORT_IOSTREAMS
@@ -612,8 +612,8 @@ public:
 	@return SI_Error    See error definitions
 	*/
 	SI_Error LoadData(
-		const char *    a_pData,
-		size_t          a_uDataLen
+			const char *    a_pData,
+			size_t          a_uDataLen
 	);
 
 	/*-----------------------------------------------------------------------*/
@@ -633,8 +633,8 @@ public:
 	@return SI_Error    See error definitions
 	*/
 	SI_Error SaveFile(
-		const char *    a_pszFile,
-		bool            a_bAddSignature = true
+			const char *    a_pszFile,
+			bool            a_bAddSignature = true
 	) const;
 
 #ifdef SI_HAS_WIDE_FILE
@@ -649,8 +649,8 @@ public:
 	@return SI_Error    See error definitions
 	*/
 	SI_Error SaveFile(
-		const SI_WCHAR_T *  a_pwszFile,
-		bool                a_bAddSignature = true
+			const SI_WCHAR_T *  a_pwszFile,
+			bool                a_bAddSignature = true
 	) const;
 #endif // _WIN32
 
@@ -667,8 +667,8 @@ public:
 	@return SI_Error    See error definitions
 	*/
 	SI_Error SaveFile(
-		FILE *  a_pFile,
-		bool    a_bAddSignature = false
+			FILE *  a_pFile,
+			bool    a_bAddSignature = false
 	) const;
 
 	/** Save the INI data. The data will be written to the output device
@@ -703,8 +703,8 @@ public:
 	@return SI_Error    See error definitions
 	*/
 	SI_Error Save(
-		OutputWriter &  a_oOutput,
-		bool            a_bAddSignature = false
+			OutputWriter &  a_oOutput,
+			bool            a_bAddSignature = false
 	) const;
 
 #ifdef SI_SUPPORT_IOSTREAMS
@@ -741,8 +741,8 @@ public:
 	@return SI_Error    See error definitions
 	*/
 	SI_Error Save(
-		std::string &   a_sBuffer,
-		bool            a_bAddSignature = false
+			std::string &   a_sBuffer,
+			bool            a_bAddSignature = false
 	) const
 	{
 		StringWriter writer(a_sBuffer);
@@ -768,7 +768,7 @@ public:
 	names. See note above!
 	*/
 	void GetAllSections(
-		TNamesDepend & a_names
+			TNamesDepend & a_names
 	) const;
 
 	/** Retrieve all unique key names in a section. The sort order of the
@@ -789,8 +789,8 @@ public:
 	@return false           Matching section was not found.
 	*/
 	bool GetAllKeys(
-		const SI_CHAR * a_pSection,
-		TNamesDepend &  a_names
+			const SI_CHAR * a_pSection,
+			TNamesDepend &  a_names
 	) const;
 
 	/** Retrieve all values for a specific key. This method can be used when
@@ -810,9 +810,9 @@ public:
 	@return false           Matching section/key was not found.
 	*/
 	bool GetAllValues(
-		const SI_CHAR * a_pSection,
-		const SI_CHAR * a_pKey,
-		TNamesDepend &  a_values
+			const SI_CHAR * a_pSection,
+			const SI_CHAR * a_pKey,
+			TNamesDepend &  a_values
 	) const;
 
 	/** Query the number of keys in a specific section. Note that if multiple
@@ -825,7 +825,7 @@ public:
 	@return >=0             Number of keys in the section
 	*/
 	int GetSectionSize(
-		const SI_CHAR * a_pSection
+			const SI_CHAR * a_pSection
 	) const;
 
 	/** Retrieve all key and value pairs for a section. The data is returned
@@ -843,7 +843,7 @@ public:
 	name found.
 	*/
 	const TKeyVal * GetSection(
-		const SI_CHAR * a_pSection
+			const SI_CHAR * a_pSection
 	) const;
 
 	/** Retrieve the value for a specific key. If multiple keys are enabled
@@ -864,10 +864,10 @@ public:
 	@return other           Value of the key
 	*/
 	const SI_CHAR * GetValue(
-		const SI_CHAR * a_pSection,
-		const SI_CHAR * a_pKey,
-		const SI_CHAR * a_pDefault = NULL,
-		bool *          a_pHasMultiple = NULL
+			const SI_CHAR * a_pSection,
+			const SI_CHAR * a_pKey,
+			const SI_CHAR * a_pDefault = NULL,
+			bool *          a_pHasMultiple = NULL
 	) const;
 
 	/** Retrieve a numeric value for a specific key. If multiple keys are enabled
@@ -884,10 +884,10 @@ public:
 	@return other           Value of the key
 	*/
 	long GetLongValue(
-		const SI_CHAR * a_pSection,
-		const SI_CHAR * a_pKey,
-		long            a_nDefault = 0,
-		bool *          a_pHasMultiple = NULL
+			const SI_CHAR * a_pSection,
+			const SI_CHAR * a_pKey,
+			long            a_nDefault = 0,
+			bool *          a_pHasMultiple = NULL
 	) const;
 
 	/** Retrieve a numeric value for a specific key. If multiple keys are enabled
@@ -904,10 +904,10 @@ public:
 	@return other           Value of the key
 	*/
 	double GetDoubleValue(
-		const SI_CHAR * a_pSection,
-		const SI_CHAR * a_pKey,
-		double          a_nDefault = 0,
-		bool *          a_pHasMultiple = NULL
+			const SI_CHAR * a_pSection,
+			const SI_CHAR * a_pKey,
+			double          a_nDefault = 0,
+			bool *          a_pHasMultiple = NULL
 	) const;
 
 	/** Retrieve a boolean value for a specific key. If multiple keys are enabled
@@ -929,10 +929,10 @@ public:
 	@return other           Value of the key
 	*/
 	bool GetBoolValue(
-		const SI_CHAR * a_pSection,
-		const SI_CHAR * a_pKey,
-		bool            a_bDefault = false,
-		bool *          a_pHasMultiple = NULL
+			const SI_CHAR * a_pSection,
+			const SI_CHAR * a_pKey,
+			bool            a_bDefault = false,
+			bool *          a_pHasMultiple = NULL
 	) const;
 
 	/** Add or update a section or value. This will always insert
@@ -965,11 +965,11 @@ public:
 	@return SI_INSERTED Value was inserted
 	*/
 	SI_Error SetValue(
-		const SI_CHAR * a_pSection,
-		const SI_CHAR * a_pKey,
-		const SI_CHAR * a_pValue,
-		const SI_CHAR * a_pComment = NULL,
-		bool            a_bForceReplace = false
+			const SI_CHAR * a_pSection,
+			const SI_CHAR * a_pKey,
+			const SI_CHAR * a_pValue,
+			const SI_CHAR * a_pComment = NULL,
+			bool            a_bForceReplace = false
 	)
 	{
 		return AddEntry(a_pSection, a_pKey, a_pValue, a_pComment, a_bForceReplace, true);
@@ -999,12 +999,12 @@ public:
 	@return SI_INSERTED Value was inserted
 	*/
 	SI_Error SetLongValue(
-		const SI_CHAR * a_pSection,
-		const SI_CHAR * a_pKey,
-		long            a_nValue,
-		const SI_CHAR * a_pComment = NULL,
-		bool            a_bUseHex = false,
-		bool            a_bForceReplace = false
+			const SI_CHAR * a_pSection,
+			const SI_CHAR * a_pKey,
+			long            a_nValue,
+			const SI_CHAR * a_pComment = NULL,
+			bool            a_bUseHex = false,
+			bool            a_bForceReplace = false
 	);
 
 	/** Add or update a double value. This will always insert
@@ -1028,11 +1028,11 @@ public:
 	@return SI_INSERTED Value was inserted
 	*/
 	SI_Error SetDoubleValue(
-		const SI_CHAR * a_pSection,
-		const SI_CHAR * a_pKey,
-		double          a_nValue,
-		const SI_CHAR * a_pComment = NULL,
-		bool            a_bForceReplace = false
+			const SI_CHAR * a_pSection,
+			const SI_CHAR * a_pKey,
+			double          a_nValue,
+			const SI_CHAR * a_pComment = NULL,
+			bool            a_bForceReplace = false
 	);
 
 	/** Add or update a boolean value. This will always insert
@@ -1056,11 +1056,11 @@ public:
 	@return SI_INSERTED Value was inserted
 	*/
 	SI_Error SetBoolValue(
-		const SI_CHAR * a_pSection,
-		const SI_CHAR * a_pKey,
-		bool            a_bValue,
-		const SI_CHAR * a_pComment = NULL,
-		bool            a_bForceReplace = false
+			const SI_CHAR * a_pSection,
+			const SI_CHAR * a_pKey,
+			bool            a_bValue,
+			const SI_CHAR * a_pComment = NULL,
+			bool            a_bForceReplace = false
 	);
 
 	/** Delete an entire section, or a key from a section. Note that the
@@ -1082,9 +1082,9 @@ public:
 	@return false           Key or section was not found.
 	*/
 	bool Delete(
-		const SI_CHAR * a_pSection,
-		const SI_CHAR * a_pKey,
-		bool            a_bRemoveEmpty = false
+			const SI_CHAR * a_pSection,
+			const SI_CHAR * a_pKey,
+			bool            a_bRemoveEmpty = false
 	);
 
 	/** Delete an entire section, or a key from a section. If value is
@@ -1108,10 +1108,10 @@ public:
 	@return false           Key/value or section was not found.
 	*/
 	bool DeleteValue(
-		const SI_CHAR * a_pSection,
-		const SI_CHAR * a_pKey,
-		const SI_CHAR * a_pValue,
-		bool            a_bRemoveEmpty = false
+			const SI_CHAR * a_pSection,
+			const SI_CHAR * a_pKey,
+			const SI_CHAR * a_pValue,
+			bool            a_bRemoveEmpty = false
 	);
 
 	/*-----------------------------------------------------------------------*/
@@ -1135,11 +1135,11 @@ private:
 	CSimpleIniTempl(const CSimpleIniTempl &); // disabled
 	CSimpleIniTempl & operator=(const CSimpleIniTempl &); // disabled
 
-														  /** Parse the data looking for a file comment and store it if found.
-														  */
+	/** Parse the data looking for a file comment and store it if found.
+    */
 	SI_Error FindFileComment(
-		SI_CHAR *&      a_pData,
-		bool            a_bCopyStrings
+			SI_CHAR *&      a_pData,
+			bool            a_bCopyStrings
 	);
 
 	/** Parse the data looking for the next valid entry. The memory pointed to
@@ -1147,11 +1147,11 @@ private:
 	updated to the current location in the block of text.
 	*/
 	bool FindEntry(
-		SI_CHAR *&  a_pData,
-		const SI_CHAR *&  a_pSection,
-		const SI_CHAR *&  a_pKey,
-		const SI_CHAR *&  a_pVal,
-		const SI_CHAR *&  a_pComment
+			SI_CHAR *&  a_pData,
+			const SI_CHAR *&  a_pSection,
+			const SI_CHAR *&  a_pKey,
+			const SI_CHAR *&  a_pVal,
+			const SI_CHAR *&  a_pComment
 	) const;
 
 	/** Add the section/key/value to our data.
@@ -1177,12 +1177,12 @@ private:
 	If false then the pointers will be used as is.
 	*/
 	SI_Error AddEntry(
-		const SI_CHAR * a_pSection,
-		const SI_CHAR * a_pKey,
-		const SI_CHAR * a_pValue,
-		const SI_CHAR * a_pComment,
-		bool            a_bForceReplace,
-		bool            a_bCopyStrings
+			const SI_CHAR * a_pSection,
+			const SI_CHAR * a_pKey,
+			const SI_CHAR * a_pValue,
+			const SI_CHAR * a_pComment,
+			bool            a_bForceReplace,
+			bool            a_bCopyStrings
 	);
 
 	/** Is the supplied character a whitespace character? */
@@ -1216,17 +1216,17 @@ private:
 	bool IsMultiLineTag(const SI_CHAR * a_pData) const;
 	bool IsMultiLineData(const SI_CHAR * a_pData) const;
 	bool LoadMultiLineText(
-		SI_CHAR *&          a_pData,
-		const SI_CHAR *&    a_pVal,
-		const SI_CHAR *     a_pTagName,
-		bool                a_bAllowBlankLinesInComment = false
+			SI_CHAR *&          a_pData,
+			const SI_CHAR *&    a_pVal,
+			const SI_CHAR *     a_pTagName,
+			bool                a_bAllowBlankLinesInComment = false
 	) const;
 	bool IsNewLineChar(SI_CHAR a_c) const;
 
 	bool OutputMultiLineText(
-		OutputWriter &  a_oOutput,
-		Converter &     a_oConverter,
-		const SI_CHAR * a_pText
+			OutputWriter &  a_oOutput,
+			Converter &     a_oConverter,
+			const SI_CHAR * a_pText
 	) const;
 
 private:
@@ -1279,18 +1279,18 @@ private:
 
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::CSimpleIniTempl(
-	bool a_bIsUtf8,
-	bool a_bAllowMultiKey,
-	bool a_bAllowMultiLine
+		bool a_bIsUtf8,
+		bool a_bAllowMultiKey,
+		bool a_bAllowMultiLine
 )
-	: m_pData(0)
-	, m_uDataLen(0)
-	, m_pFileComment(NULL)
-	, m_bStoreIsUtf8(a_bIsUtf8)
-	, m_bAllowMultiKey(a_bAllowMultiKey)
-	, m_bAllowMultiLine(a_bAllowMultiLine)
-	, m_bSpaces(true)
-	, m_nOrder(0)
+		: m_pData(0)
+		, m_uDataLen(0)
+		, m_pFileComment(NULL)
+		, m_bStoreIsUtf8(a_bIsUtf8)
+		, m_bAllowMultiKey(a_bAllowMultiKey)
+		, m_bAllowMultiLine(a_bAllowMultiLine)
+		, m_bSpaces(true)
+		, m_nOrder(0)
 { }
 
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
@@ -1325,7 +1325,7 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::Reset()
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 SI_Error
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::LoadFile(
-	const char * a_pszFile
+		const char * a_pszFile
 )
 {
 	FILE * fp = NULL;
@@ -1346,7 +1346,7 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::LoadFile(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 SI_Error
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::LoadFile(
-	const SI_WCHAR_T * a_pwszFile
+		const SI_WCHAR_T * a_pwszFile
 )
 {
 #ifdef _WIN32
@@ -1371,7 +1371,7 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::LoadFile(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 SI_Error
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::LoadFile(
-	FILE * a_fpFile
+		FILE * a_fpFile
 )
 {
 	// load the raw file data
@@ -1411,8 +1411,8 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::LoadFile(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 SI_Error
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::LoadData(
-	const char *    a_pData,
-	size_t          a_uDataLen
+		const char *    a_pData,
+		size_t          a_uDataLen
 )
 {
 	SI_CONVERTER converter(m_bStoreIsUtf8);
@@ -1504,8 +1504,8 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::LoadData(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 SI_Error
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::FindFileComment(
-	SI_CHAR *&      a_pData,
-	bool            a_bCopyStrings
+		SI_CHAR *&      a_pData,
+		bool            a_bCopyStrings
 )
 {
 	// there can only be a single file comment
@@ -1531,11 +1531,11 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::FindFileComment(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 bool
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::FindEntry(
-	SI_CHAR *&        a_pData,
-	const SI_CHAR *&  a_pSection,
-	const SI_CHAR *&  a_pKey,
-	const SI_CHAR *&  a_pVal,
-	const SI_CHAR *&  a_pComment
+		SI_CHAR *&        a_pData,
+		const SI_CHAR *&  a_pSection,
+		const SI_CHAR *&  a_pKey,
+		const SI_CHAR *&  a_pVal,
+		const SI_CHAR *&  a_pComment
 ) const
 {
 	a_pComment = NULL;
@@ -1664,7 +1664,7 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::FindEntry(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 bool
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::IsMultiLineTag(
-	const SI_CHAR * a_pVal
+		const SI_CHAR * a_pVal
 ) const
 {
 	// check for the "<<<" prefix for a multi-line entry
@@ -1677,7 +1677,7 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::IsMultiLineTag(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 bool
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::IsMultiLineData(
-	const SI_CHAR * a_pData
+		const SI_CHAR * a_pData
 ) const
 {
 	// data is multi-line if it has any of the following features:
@@ -1714,7 +1714,7 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::IsMultiLineData(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 bool
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::IsNewLineChar(
-	SI_CHAR a_c
+		SI_CHAR a_c
 ) const
 {
 	return (a_c == '\n' || a_c == '\r');
@@ -1723,10 +1723,10 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::IsNewLineChar(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 bool
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::LoadMultiLineText(
-	SI_CHAR *&          a_pData,
-	const SI_CHAR *&    a_pVal,
-	const SI_CHAR *     a_pTagName,
-	bool                a_bAllowBlankLinesInComment
+		SI_CHAR *&          a_pData,
+		const SI_CHAR *&    a_pVal,
+		const SI_CHAR *     a_pTagName,
+		bool                a_bAllowBlankLinesInComment
 ) const
 {
 	// we modify this data to strip all newlines down to a single '\n'
@@ -1847,7 +1847,7 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::LoadMultiLineText(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 SI_Error
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::CopyString(
-	const SI_CHAR *& a_pString
+		const SI_CHAR *& a_pString
 )
 {
 	size_t uLen = 0;
@@ -1874,12 +1874,12 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::CopyString(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 SI_Error
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::AddEntry(
-	const SI_CHAR * a_pSection,
-	const SI_CHAR * a_pKey,
-	const SI_CHAR * a_pValue,
-	const SI_CHAR * a_pComment,
-	bool            a_bForceReplace,
-	bool            a_bCopyStrings
+		const SI_CHAR * a_pSection,
+		const SI_CHAR * a_pKey,
+		const SI_CHAR * a_pValue,
+		const SI_CHAR * a_pComment,
+		bool            a_bForceReplace,
+		bool            a_bCopyStrings
 )
 {
 	SI_Error rc;
@@ -1979,10 +1979,10 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::AddEntry(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 const SI_CHAR *
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::GetValue(
-	const SI_CHAR * a_pSection,
-	const SI_CHAR * a_pKey,
-	const SI_CHAR * a_pDefault,
-	bool *          a_pHasMultiple
+		const SI_CHAR * a_pSection,
+		const SI_CHAR * a_pKey,
+		const SI_CHAR * a_pDefault,
+		bool *          a_pHasMultiple
 ) const
 {
 	if (a_pHasMultiple) {
@@ -2016,10 +2016,10 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::GetValue(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 long
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::GetLongValue(
-	const SI_CHAR * a_pSection,
-	const SI_CHAR * a_pKey,
-	long            a_nDefault,
-	bool *          a_pHasMultiple
+		const SI_CHAR * a_pSection,
+		const SI_CHAR * a_pKey,
+		long            a_nDefault,
+		bool *          a_pHasMultiple
 ) const
 {
 	// return the default if we don't have a value
@@ -2055,12 +2055,12 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::GetLongValue(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 SI_Error
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::SetLongValue(
-	const SI_CHAR * a_pSection,
-	const SI_CHAR * a_pKey,
-	long            a_nValue,
-	const SI_CHAR * a_pComment,
-	bool            a_bUseHex,
-	bool            a_bForceReplace
+		const SI_CHAR * a_pSection,
+		const SI_CHAR * a_pKey,
+		long            a_nValue,
+		const SI_CHAR * a_pComment,
+		bool            a_bUseHex,
+		bool            a_bForceReplace
 )
 {
 	// use SetValue to create sections
@@ -2078,7 +2078,7 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::SetLongValue(
 	SI_CHAR szOutput[64];
 	SI_CONVERTER c(m_bStoreIsUtf8);
 	c.ConvertFromStore(szInput, strlen(szInput) + 1,
-		szOutput, sizeof(szOutput) / sizeof(SI_CHAR));
+					   szOutput, sizeof(szOutput) / sizeof(SI_CHAR));
 
 	// actually add it
 	return AddEntry(a_pSection, a_pKey, szOutput, a_pComment, a_bForceReplace, true);
@@ -2087,10 +2087,10 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::SetLongValue(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 double
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::GetDoubleValue(
-	const SI_CHAR * a_pSection,
-	const SI_CHAR * a_pKey,
-	double          a_nDefault,
-	bool *          a_pHasMultiple
+		const SI_CHAR * a_pSection,
+		const SI_CHAR * a_pKey,
+		double          a_nDefault,
+		bool *          a_pHasMultiple
 ) const
 {
 	// return the default if we don't have a value
@@ -2118,11 +2118,11 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::GetDoubleValue(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 SI_Error
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::SetDoubleValue(
-	const SI_CHAR * a_pSection,
-	const SI_CHAR * a_pKey,
-	double          a_nValue,
-	const SI_CHAR * a_pComment,
-	bool            a_bForceReplace
+		const SI_CHAR * a_pSection,
+		const SI_CHAR * a_pKey,
+		double          a_nValue,
+		const SI_CHAR * a_pComment,
+		bool            a_bForceReplace
 )
 {
 	// use SetValue to create sections
@@ -2140,7 +2140,7 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::SetDoubleValue(
 	SI_CHAR szOutput[64];
 	SI_CONVERTER c(m_bStoreIsUtf8);
 	c.ConvertFromStore(szInput, strlen(szInput) + 1,
-		szOutput, sizeof(szOutput) / sizeof(SI_CHAR));
+					   szOutput, sizeof(szOutput) / sizeof(SI_CHAR));
 
 	// actually add it
 	return AddEntry(a_pSection, a_pKey, szOutput, a_pComment, a_bForceReplace, true);
@@ -2149,10 +2149,10 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::SetDoubleValue(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 bool
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::GetBoolValue(
-	const SI_CHAR * a_pSection,
-	const SI_CHAR * a_pKey,
-	bool            a_bDefault,
-	bool *          a_pHasMultiple
+		const SI_CHAR * a_pSection,
+		const SI_CHAR * a_pKey,
+		bool            a_bDefault,
+		bool *          a_pHasMultiple
 ) const
 {
 	// return the default if we don't have a value
@@ -2161,20 +2161,20 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::GetBoolValue(
 
 	// we only look at the minimum number of characters
 	switch (pszValue[0]) {
-	case 't': case 'T': // true
-	case 'y': case 'Y': // yes
-	case '1':           // 1 (one)
-		return true;
+		case 't': case 'T': // true
+		case 'y': case 'Y': // yes
+		case '1':           // 1 (one)
+			return true;
 
-	case 'f': case 'F': // false
-	case 'n': case 'N': // no
-	case '0':           // 0 (zero)
-		return false;
+		case 'f': case 'F': // false
+		case 'n': case 'N': // no
+		case '0':           // 0 (zero)
+			return false;
 
-	case 'o': case 'O':
-		if (pszValue[1] == 'n' || pszValue[1] == 'N') return true;  // on
-		if (pszValue[1] == 'f' || pszValue[1] == 'F') return false; // off
-		break;
+		case 'o': case 'O':
+			if (pszValue[1] == 'n' || pszValue[1] == 'N') return true;  // on
+			if (pszValue[1] == 'f' || pszValue[1] == 'F') return false; // off
+			break;
 	}
 
 	// no recognized value, return the default
@@ -2184,11 +2184,11 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::GetBoolValue(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 SI_Error
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::SetBoolValue(
-	const SI_CHAR * a_pSection,
-	const SI_CHAR * a_pKey,
-	bool            a_bValue,
-	const SI_CHAR * a_pComment,
-	bool            a_bForceReplace
+		const SI_CHAR * a_pSection,
+		const SI_CHAR * a_pKey,
+		bool            a_bValue,
+		const SI_CHAR * a_pComment,
+		bool            a_bForceReplace
 )
 {
 	// use SetValue to create sections
@@ -2201,7 +2201,7 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::SetBoolValue(
 	SI_CHAR szOutput[64];
 	SI_CONVERTER c(m_bStoreIsUtf8);
 	c.ConvertFromStore(pszInput, strlen(pszInput) + 1,
-		szOutput, sizeof(szOutput) / sizeof(SI_CHAR));
+					   szOutput, sizeof(szOutput) / sizeof(SI_CHAR));
 
 	// actually add it
 	return AddEntry(a_pSection, a_pKey, szOutput, a_pComment, a_bForceReplace, true);
@@ -2210,9 +2210,9 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::SetBoolValue(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 bool
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::GetAllValues(
-	const SI_CHAR * a_pSection,
-	const SI_CHAR * a_pKey,
-	TNamesDepend &  a_values
+		const SI_CHAR * a_pSection,
+		const SI_CHAR * a_pKey,
+		TNamesDepend &  a_values
 ) const
 {
 	a_values.clear();
@@ -2245,7 +2245,7 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::GetAllValues(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 int
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::GetSectionSize(
-	const SI_CHAR * a_pSection
+		const SI_CHAR * a_pSection
 ) const
 {
 	if (!a_pSection) {
@@ -2280,7 +2280,7 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::GetSectionSize(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 const typename CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::TKeyVal *
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::GetSection(
-	const SI_CHAR * a_pSection
+		const SI_CHAR * a_pSection
 ) const
 {
 	if (a_pSection) {
@@ -2295,7 +2295,7 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::GetSection(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 void
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::GetAllSections(
-	TNamesDepend & a_names
+		TNamesDepend & a_names
 ) const
 {
 	a_names.clear();
@@ -2308,8 +2308,8 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::GetAllSections(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 bool
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::GetAllKeys(
-	const SI_CHAR * a_pSection,
-	TNamesDepend &  a_names
+		const SI_CHAR * a_pSection,
+		TNamesDepend &  a_names
 ) const
 {
 	a_names.clear();
@@ -2339,8 +2339,8 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::GetAllKeys(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 SI_Error
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::SaveFile(
-	const char *    a_pszFile,
-	bool            a_bAddSignature
+		const char *    a_pszFile,
+		bool            a_bAddSignature
 ) const
 {
 	FILE * fp = NULL;
@@ -2359,8 +2359,8 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::SaveFile(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 SI_Error
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::SaveFile(
-	const SI_WCHAR_T *  a_pwszFile,
-	bool                a_bAddSignature
+		const SI_WCHAR_T *  a_pwszFile,
+		bool                a_bAddSignature
 ) const
 {
 #ifdef _WIN32
@@ -2385,8 +2385,8 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::SaveFile(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 SI_Error
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::SaveFile(
-	FILE *  a_pFile,
-	bool    a_bAddSignature
+		FILE *  a_pFile,
+		bool    a_bAddSignature
 ) const
 {
 	FileWriter writer(a_pFile);
@@ -2396,8 +2396,8 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::SaveFile(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 SI_Error
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::Save(
-	OutputWriter &  a_oOutput,
-	bool            a_bAddSignature
+		OutputWriter &  a_oOutput,
+		bool            a_bAddSignature
 ) const
 {
 	Converter convert(m_bStoreIsUtf8);
@@ -2523,9 +2523,9 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::Save(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 bool
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::OutputMultiLineText(
-	OutputWriter &  a_oOutput,
-	Converter &     a_oConverter,
-	const SI_CHAR * a_pText
+		OutputWriter &  a_oOutput,
+		Converter &     a_oConverter,
+		const SI_CHAR * a_pText
 ) const
 {
 	const SI_CHAR * pEndOfLine;
@@ -2552,9 +2552,9 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::OutputMultiLineText(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 bool
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::Delete(
-	const SI_CHAR * a_pSection,
-	const SI_CHAR * a_pKey,
-	bool            a_bRemoveEmpty
+		const SI_CHAR * a_pSection,
+		const SI_CHAR * a_pKey,
+		bool            a_bRemoveEmpty
 )
 {
 	return DeleteValue(a_pSection, a_pKey, NULL, a_bRemoveEmpty);
@@ -2563,10 +2563,10 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::Delete(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 bool
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::DeleteValue(
-	const SI_CHAR * a_pSection,
-	const SI_CHAR * a_pKey,
-	const SI_CHAR * a_pValue,
-	bool            a_bRemoveEmpty
+		const SI_CHAR * a_pSection,
+		const SI_CHAR * a_pKey,
+		const SI_CHAR * a_pValue,
+		bool            a_bRemoveEmpty
 )
 {
 	if (!a_pSection) {
@@ -2595,14 +2595,14 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::DeleteValue(
 
 			if (a_pValue == NULL ||
 				(isLess(a_pValue, iDelete->second) == false &&
-					isLess(iDelete->second, a_pValue) == false)) {
+				 isLess(iDelete->second, a_pValue) == false)) {
 				DeleteString(iDelete->first.pItem);
 				DeleteString(iDelete->second);
 				iSection->second.erase(iDelete);
 				bDeleted = true;
 			}
 		} while (iKeyVal != iSection->second.end()
-			&& !IsLess(a_pKey, iKeyVal->first.pItem));
+				 && !IsLess(a_pKey, iKeyVal->first.pItem));
 
 		if (!bDeleted) {
 			return false;
@@ -2635,7 +2635,7 @@ CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::DeleteValue(
 template<class SI_CHAR, class SI_STRLESS, class SI_CONVERTER>
 void
 CSimpleIniTempl<SI_CHAR, SI_STRLESS, SI_CONVERTER>::DeleteString(
-	const SI_CHAR * a_pString
+		const SI_CHAR * a_pString
 )
 {
 	// strings may exist either inside the data block, or they will be
@@ -2749,8 +2749,8 @@ public:
 	* @return              -1 cast to size_t on a conversion error.
 	*/
 	size_t SizeFromStore(
-		const char *    a_pInputData,
-		size_t          a_uInputDataLen)
+			const char *    a_pInputData,
+			size_t          a_uInputDataLen)
 	{
 		(void)a_pInputData;
 		SI_ASSERT(a_uInputDataLen != (size_t)-1);
@@ -2773,10 +2773,10 @@ public:
 	*                      converted.
 	*/
 	bool ConvertFromStore(
-		const char *    a_pInputData,
-		size_t          a_uInputDataLen,
-		SI_CHAR *       a_pOutputData,
-		size_t          a_uOutputDataSize)
+			const char *    a_pInputData,
+			size_t          a_uInputDataLen,
+			SI_CHAR *       a_pOutputData,
+			size_t          a_uOutputDataSize)
 	{
 		// ASCII/MBCS/UTF-8 needs no conversion
 		if (a_uInputDataLen > a_uOutputDataSize) {
@@ -2797,7 +2797,7 @@ public:
 	* @return              -1 cast to size_t on a conversion error.
 	*/
 	size_t SizeToStore(
-		const SI_CHAR * a_pInputData)
+			const SI_CHAR * a_pInputData)
 	{
 		// ASCII/MBCS/UTF-8 needs no conversion
 		return strlen((const char *)a_pInputData) + 1;
@@ -2817,9 +2817,9 @@ public:
 	*                      converted.
 	*/
 	bool ConvertToStore(
-		const SI_CHAR * a_pInputData,
-		char *          a_pOutputData,
-		size_t          a_uOutputDataSize)
+			const SI_CHAR * a_pInputData,
+			char *          a_pOutputData,
+			size_t          a_uOutputDataSize)
 	{
 		// calc input string length (SI_CHAR type and size independent)
 		size_t uInputLen = strlen((const char *)a_pInputData) + 1;
@@ -3262,11 +3262,11 @@ struct SI_NoCase {
 	bool operator()(const SI_CHAR * pLeft, const SI_CHAR * pRight) const {
 		if (sizeof(SI_CHAR) == sizeof(char)) {
 			return _mbsicmp((const unsigned char *)pLeft,
-				(const unsigned char *)pRight) < 0;
+							(const unsigned char *)pRight) < 0;
 		}
 		if (sizeof(SI_CHAR) == sizeof(wchar_t)) {
 			return _wcsicmp((const wchar_t *)pLeft,
-				(const wchar_t *)pRight) < 0;
+							(const wchar_t *)pRight) < 0;
 		}
 		return SI_GenericNoCase<SI_CHAR>()(pLeft, pRight);
 	}
@@ -3310,15 +3310,15 @@ public:
 	* @return              -1 cast to size_t on a conversion error.
 	*/
 	size_t SizeFromStore(
-		const char *    a_pInputData,
-		size_t          a_uInputDataLen)
+			const char *    a_pInputData,
+			size_t          a_uInputDataLen)
 	{
 		SI_ASSERT(a_uInputDataLen != (size_t)-1);
 
 		int retval = MultiByteToWideChar(
-			m_uCodePage, 0,
-			a_pInputData, (int)a_uInputDataLen,
-			0, 0);
+				m_uCodePage, 0,
+				a_pInputData, (int)a_uInputDataLen,
+				0, 0);
 		return (size_t)(retval > 0 ? retval : -1);
 	}
 
@@ -3336,15 +3336,15 @@ public:
 	*                      converted.
 	*/
 	bool ConvertFromStore(
-		const char *    a_pInputData,
-		size_t          a_uInputDataLen,
-		SI_CHAR *       a_pOutputData,
-		size_t          a_uOutputDataSize)
+			const char *    a_pInputData,
+			size_t          a_uInputDataLen,
+			SI_CHAR *       a_pOutputData,
+			size_t          a_uOutputDataSize)
 	{
 		int nSize = MultiByteToWideChar(
-			m_uCodePage, 0,
-			a_pInputData, (int)a_uInputDataLen,
-			(wchar_t *)a_pOutputData, (int)a_uOutputDataSize);
+				m_uCodePage, 0,
+				a_pInputData, (int)a_uInputDataLen,
+				(wchar_t *)a_pOutputData, (int)a_uOutputDataSize);
 		return (nSize > 0);
 	}
 
@@ -3359,12 +3359,12 @@ public:
 	* @return              -1 cast to size_t on a conversion error.
 	*/
 	size_t SizeToStore(
-		const SI_CHAR * a_pInputData)
+			const SI_CHAR * a_pInputData)
 	{
 		int retval = WideCharToMultiByte(
-			m_uCodePage, 0,
-			(const wchar_t *)a_pInputData, -1,
-			0, 0, 0, 0);
+				m_uCodePage, 0,
+				(const wchar_t *)a_pInputData, -1,
+				0, 0, 0, 0);
 		return (size_t)(retval > 0 ? retval : -1);
 	}
 
@@ -3382,14 +3382,14 @@ public:
 	*                      converted.
 	*/
 	bool ConvertToStore(
-		const SI_CHAR * a_pInputData,
-		char *          a_pOutputData,
-		size_t          a_uOutputDataSize)
+			const SI_CHAR * a_pInputData,
+			char *          a_pOutputData,
+			size_t          a_uOutputDataSize)
 	{
 		int retval = WideCharToMultiByte(
-			m_uCodePage, 0,
-			(const wchar_t *)a_pInputData, -1,
-			a_pOutputData, (int)a_uOutputDataSize, 0, 0);
+				m_uCodePage, 0,
+				(const wchar_t *)a_pInputData, -1,
+				a_pOutputData, (int)a_uOutputDataSize, 0, 0);
 		return retval > 0;
 	}
 };
@@ -3402,9 +3402,9 @@ public:
 // ---------------------------------------------------------------------------
 
 typedef CSimpleIniTempl<char,
-	SI_NoCase<char>, SI_ConvertA<char> >                 CSimpleIniA;
+		SI_NoCase<char>, SI_ConvertA<char> >                 CSimpleIniA;
 typedef CSimpleIniTempl<char,
-	SI_Case<char>, SI_ConvertA<char> >                   CSimpleIniCaseA;
+		SI_Case<char>, SI_ConvertA<char> >                   CSimpleIniCaseA;
 
 #if defined(SI_CONVERT_ICU)
 typedef CSimpleIniTempl<UChar,
@@ -3413,9 +3413,9 @@ typedef CSimpleIniTempl<UChar,
 	SI_Case<UChar>, SI_ConvertW<UChar> >                 CSimpleIniCaseW;
 #else
 typedef CSimpleIniTempl<wchar_t,
-	SI_NoCase<wchar_t>, SI_ConvertW<wchar_t> >           CSimpleIniW;
+		SI_NoCase<wchar_t>, SI_ConvertW<wchar_t> >           CSimpleIniW;
 typedef CSimpleIniTempl<wchar_t,
-	SI_Case<wchar_t>, SI_ConvertW<wchar_t> >             CSimpleIniCaseW;
+		SI_Case<wchar_t>, SI_ConvertW<wchar_t> >             CSimpleIniCaseW;
 #endif
 
 #ifdef _UNICODE

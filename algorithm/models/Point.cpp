@@ -18,10 +18,18 @@ Point::Point (vector <double> v, int i):
 	values(v), 
 	dist(0), 
 	epsilon(0), 
-	id(i)
+	id(i),
+    distanceFromReference(0)
 {
 }
 
+void Point::setDistanceFromReference (double distance) {
+    this->distanceFromReference = distance;
+}
+
+double Point::getDistanceFromReference() const {
+    return this->distanceFromReference;
+}
 
 vector <double> Point::getAttributes() const {
     return values;
