@@ -1,17 +1,15 @@
 #pragma once
-#include "Point.h"
-
+#include <memory>
 #include <vector>
 #include "Point.h"
 
 class Cluster {
 	static int ID;
 	const int cid;
-	std::vector<Point> points;
+	std::vector<std::shared_ptr<Point>> points;
 public:
 	Cluster();
-	void add(Point point);
+	void add(std::shared_ptr<Point> point);
 	int size() const;
 	inline int id() { return cid; };
-
 };

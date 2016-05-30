@@ -14,13 +14,14 @@
 class Dataset {
 
 public:
-    std::vector<Point> getPoints();
-    void setPoints(std::vector<Point>);
+	Dataset(std::vector<std::shared_ptr<Point>>);
+	std::vector<std::shared_ptr<Point>> getPoints();
+    void setPoints(std::vector<std::shared_ptr<Point>>);
     int getPointsSize();
-    bool PrecedingPoint(Point&) const;
-    bool FollowingPoint(Point&) const;
+    bool PrecedingPoint(std::shared_ptr<Point> &point) const;
+    bool FollowingPoint(std::shared_ptr<Point> &point) const;
     void sortPoints();
-    int getPointIndex(Point p);
+    int getPointIndex(std::shared_ptr<Point> p);
     void calculateRefPointDistance();
     const Point &getReferencePoint() const;
     void setReferencePoint(const Point &referencePoint);
@@ -32,9 +33,8 @@ public:
 	static auto readDatasetFile(std::string const& filename)->std::shared_ptr<Dataset>;
 
 private:
-	Dataset(std::vector<Point>);
     Point referencePoint;
-    std::vector<Point> points;
+	std::vector<std::shared_ptr<Point>> points;
     int distanceMeasure;
     double cMinkowski;
  };

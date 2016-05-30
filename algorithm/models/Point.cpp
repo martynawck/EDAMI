@@ -9,21 +9,19 @@
 
 using namespace std;
 
-Point::Point (vector <double> values, int id) {
-    this->values = values;
-    this->dist = 0;
-    this->kNeighbourhoodIndex = set<Point,classcomp>();
-    this->epsilon = 0;
-    this->id = id;
+
+Point::Point() : Point(vector<double>(), 0)
+{
 }
 
-Point::Point() {
-    this->values = vector<double>();
-    this->dist = 0;
-    this->kNeighbourhoodIndex = set<Point,classcomp>();
-    this->epsilon = 0;
-    this->id = 0;
+Point::Point (vector <double> v, int i): 
+	values(v), 
+	dist(0), 
+	epsilon(0), 
+	id(i)
+{
 }
+
 
 vector <double> Point::getAttributes() const {
     return values;
@@ -33,18 +31,18 @@ void Point::setAttributes (vector <double> values ) {
     this->values = values;
 }
 
-std::set<Point, Point::classcomp>& Point::getKNeighbourhoodIndex()  {
-    return this->kNeighbourhoodIndex;
+std::set<shared_ptr<Point>, Point::classcomp> Point::getKNeighbourhoodIndex()  {
+    return kNeighbourhoodIndex;
 }
 
-void Point::addPointToKNeighbourhoodIndex(Point p) {
+void Point::addPointToKNeighbourhoodIndex(shared_ptr<Point> p) {
 
-    Point p1 = p;
-    p1.clearKNeighbourhood();
+    auto p1 = p;
+    p1->clearKNeighbourhood();
     kNeighbourhoodIndex.insert(p1);
 }
 
-void Point::appendReverseNeighbour(Point point)
+void Point::appendReverseNeighbour(shared_ptr<Point> point)
 {
 	reverseNeighbourhood.insert(point);
 }
@@ -52,8 +50,8 @@ void Point::appendReverseNeighbour(Point point)
 void Point::clearKNeighbourhood() {
     this->kNeighbourhoodIndex.clear();
 }
-void Point::deletePointFromKNeighbourhoodIndex(Point p) {
-    std::set<Point, classcomp>::const_iterator it = find(kNeighbourhoodIndex.begin(), kNeighbourhoodIndex.end(), p);
+void Point::deletePointFromKNeighbourhoodIndex(shared_ptr<Point> p) {
+    auto it = kNeighbourhoodIndex.find(p);
     if (it != kNeighbourhoodIndex.end())
         kNeighbourhoodIndex.erase(it);
 }
@@ -95,7 +93,7 @@ void Point::setDistance(double distance) {
     this->dist = distance;
 }
 
-void Point::setKNeighbourhoodIndex(std::set<Point, classcomp> kNeighbourhoodIndex) {
+void Point::setKNeighbourhoodIndex(std::set<shared_ptr<Point>, classcomp> kNeighbourhoodIndex) {
     this->kNeighbourhoodIndex = kNeighbourhoodIndex;
 }
 

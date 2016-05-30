@@ -16,6 +16,6 @@ public:
 	inline int k() { return nk; };
 	inline void k(int k) { nk = k; }
 private:
-	auto annotated_points() const -> std::vector<Point> ;
-	auto find_cluster_candidates(Point const& point) const -> std::set<Point>;
+	auto annotated_points() const -> std::vector<std::shared_ptr<Point>> ;
+	auto find_cluster_candidates(std::shared_ptr<Point>) const -> std::set<std::shared_ptr<Point>>;
 };

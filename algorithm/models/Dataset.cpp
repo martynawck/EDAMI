@@ -4,14 +4,18 @@
 
 #include <algorithm>
 #include <fstream>
+#include <istream>
 #include <memory>
 #include <string>
 #include <sstream>
+#include <vector>
 #include "Dataset.h"
 
 using std::map;
 using std::string;
 using std::vector;
+using std::shared_ptr;
+
 
 vector<vector<double>> intoDoubles(vector<vector<string>> vec) {
 	vector<vector<double>> vectorx;
@@ -29,15 +33,15 @@ vector<vector<double>> intoDoubles(vector<vector<string>> vec) {
 	return vectorx;
 }
 
-Dataset::Dataset(vector<Point> points): points(points), referencePoint(Point())
+Dataset::Dataset(std::vector<std::shared_ptr<Point>> data): points(data), referencePoint(Point())
 {
 }
 
-vector<Point> Dataset::getPoints() {
-    return this->points;
+std::vector<std::shared_ptr<Point>> Dataset::getPoints() {
+    return points;
 }
 
-void Dataset::setPoints(vector<Point> points) {
+void Dataset::setPoints(std::vector<std::shared_ptr<Point>>) {
     this->points = points;
 }
 
@@ -53,13 +57,8 @@ void Dataset::setDistanceMeasure(int measure) {
     this->distanceMeasure = measure;
 }
 
-int Dataset::getPointIndex(Point p) {
-    return find(points.begin(), points.end(), p) - points.begin();
-}
-
-bool Dataset::PrecedingPoint(Point& point) const {
-
-    vector<Point>::const_iterator it = find(points.begin(), points.end(), point);
+bool Dataset::PrecedingPoint(shared_ptr<Point>& point) const {
+	auto it = find(points.begin(), points.end(), point);
     if (it != points.begin()) {
         point = *(--it);
         return true;
@@ -67,8 +66,8 @@ bool Dataset::PrecedingPoint(Point& point) const {
     return false;
 }
 
-bool Dataset::FollowingPoint(Point& point) const {
-    vector<Point>::const_iterator it = find(points.begin(), points.end(), point);
+bool Dataset::FollowingPoint(std::shared_ptr<Point>& point) const {
+    auto it = find(points.begin(), points.end(), point);
     if (it != (points.end()-1)) {
         point = *(++it);
         return true;
@@ -76,8 +75,8 @@ bool Dataset::FollowingPoint(Point& point) const {
     return false;
 }
 
-bool cmd(const Point &p1, const Point &p2) {
-    return p1.getDistance() < p2.getDistance();
+bool cmd(shared_ptr<Point> p1, shared_ptr<Point> p2) {
+    return p1->getDistance() < p2->getDistance();
 }
 
 void Dataset::sortPoints(){
@@ -86,9 +85,9 @@ void Dataset::sortPoints(){
 
 void Dataset::calculateRefPointDistance() {
     vector<std::tuple<Point, double>> result;
-	for (vector<Point>::iterator it = points.begin(); it != points.end(); ++it) {
-		double distance = referencePoint.calculateDistanceMeasure(*it, this->getDistanceMeasure(), this->getCMinkowski());
-		it->setDistance(distance);
+	for (auto it = points.begin(); it != points.end(); ++it) {
+		double distance = referencePoint.calculateDistanceMeasure(*(it->get()), this->getDistanceMeasure(), this->getCMinkowski());
+		it->get()->setDistance(distance);
 	}
 }
 
@@ -113,11 +112,10 @@ auto Dataset::readDatasetFile(string const& filename) -> std::shared_ptr<Dataset
 	}
 
 	int i = 1;
-	vector<Point> points;
+	vector<std::shared_ptr<Point>> points;
 	for (auto const& it: intoDoubles(values)) {
-		points.emplace_back(it, i++);
+		points.push_back(std::shared_ptr<Point>(new Point(it, i++)));
 	}
-
 	return std::shared_ptr<Dataset>(new Dataset(points));
 }
 

@@ -8,5 +8,5 @@
 #include <vector>
 #include "models/Dataset.h"
 
-std::vector<Point> TI_k_Neighbourhood_Index(Dataset&, int);
+std::vector<std::shared_ptr<Point>> TI_k_Neighbourhood_Index(Dataset&, int);
 #endif //EDAMI_NBC_H

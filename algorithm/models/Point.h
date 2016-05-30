@@ -17,20 +17,20 @@ class Point {
 public:
 
     struct classcomp {
-        bool operator() (const Point& lhs, const Point& rhs) const
-        {return lhs.getDistance() <rhs.getDistance();}
+        bool operator() (std::shared_ptr<Point> const& lhs, std::shared_ptr<Point> const& rhs) const
+        {return lhs->getDistance() < rhs->getDistance();}
     };
 
 public:
 	Point();
-    Point(std::vector <double>, int=0);
+    Point(std::vector<double>, int=0);
     std::vector<double> getAttributes() const;
     void setAttributes (std::vector <double> );
-    std::set<Point,classcomp>& getKNeighbourhoodIndex();
-    void setKNeighbourhoodIndex(std::set<Point, classcomp>);
-    void addPointToKNeighbourhoodIndex(Point);
-	void appendReverseNeighbour(Point);
-    void deletePointFromKNeighbourhoodIndex(Point);
+    std::set<std::shared_ptr<Point>, classcomp> getKNeighbourhoodIndex();
+    void setKNeighbourhoodIndex(std::set<std::shared_ptr<Point>, classcomp>);
+    void addPointToKNeighbourhoodIndex(std::shared_ptr<Point>);
+	void appendReverseNeighbour(std::shared_ptr<Point>);
+    void deletePointFromKNeighbourhoodIndex(std::shared_ptr<Point>);
     int getSizeOfKNeighbourhoodIndex () const;
     double getDistance() const;
     void setDistance(double refPointDistance);
@@ -50,26 +50,14 @@ public:
     bool operator<(const Point &item) const {
         return (values < item.values);
     }
-    bool operator==(const Point &item) const  {
-        return (id == item.id);
-    }
 
-    Point& operator= (const Point& point) {
-
-        this->values = point.values;
-        this->kNeighbourhoodIndex = point.kNeighbourhoodIndex;
-        this->dist = point.dist;
-        this->epsilon = point.epsilon;
-        this->id = point.id;
-
-        return *this;
-    }
+	bool operator==(Point const& item) const {
+		return id == item.id;
+	}
 
 private:
-
-
-    std::set<Point, classcomp> kNeighbourhoodIndex;
-	std::set<Point> reverseNeighbourhood;
+    std::set<std::shared_ptr<Point>, classcomp> kNeighbourhoodIndex;
+	std::set<std::shared_ptr<Point>, classcomp> reverseNeighbourhood;
 
     std::vector<double> values;
     double dist;

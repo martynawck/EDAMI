@@ -10,12 +10,12 @@
 using namespace std;
 
 int main()
- try {
+try {
 	Config cfg("edami.cfg");
 	string path = cfg.value<string>("nbc.dataset");
 
-    auto dataset = Dataset::readDatasetFile(path);
-    dataset->setDistanceMeasure(2);
+	auto dataset = Dataset::readDatasetFile(path);
+	dataset->setDistanceMeasure(2);
 	
 	NeighbourhoodAnalyzer analyzer(dataset);
 	auto clusters = analyzer.clusterize();
