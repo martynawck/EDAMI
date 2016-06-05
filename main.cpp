@@ -18,9 +18,10 @@ try {
 	dataset->setDistanceMeasure(cfg.value<int> ("nbc.measure"));
 	
 	NeighbourhoodAnalyzer analyzer(dataset);
+	analyzer.k(cfg.value<int>("nbc.k"));
 	auto clusters = analyzer.clusterize();
 	for (auto const& cluster : clusters) {
-		cout << cluster.size() << endl;
+		cout << cluster.pretty_print();
 	}
 
 	cin.sync();
