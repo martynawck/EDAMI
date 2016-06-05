@@ -91,8 +91,10 @@ void Dataset::calculateRefPointDistance() {
 	/*vector <double> vector1 (2, 0.0);
 	referencePoint = Point(vector1,-1);*/
 	for (auto it = points.begin(); it != points.end(); ++it) {
-		double distance = referencePoint.calculateDistanceMeasure(*(it->get()), this->getDistanceMeasure(), this->getCMinkowski());
+
+		double distance = referencePoint.calculateDistanceMeasure(**it, this->getDistanceMeasure(), this->getCMinkowski());
 		it->get()->setDistanceFromReference(distance);
+
 	}
 }
 

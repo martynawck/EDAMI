@@ -17,6 +17,7 @@ void Find_First_k_Candidate_Neighbours_Forward_and_Backward(Dataset dataset, sha
     while (forwardSearch && backwardSearch && i < k) {
         if (p->getDistanceFromReference() - b->getDistanceFromReference() <
                 f->getDistanceFromReference() - p->getDistanceFromReference()) {
+
             auto e = b;
             e->setDistance(b->calculateDistanceMeasure(*p, dataset.getDistanceMeasure(), dataset.getCMinkowski()));
             i++;

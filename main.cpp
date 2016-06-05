@@ -15,7 +15,7 @@ try {
 	string path = cfg.value<string>("nbc.dataset");
 
 	auto dataset = Dataset::readDatasetFile(path);
-	dataset->setDistanceMeasure(2);
+	dataset->setDistanceMeasure(cfg.value<int> ("nbc.measure"));
 	
 	NeighbourhoodAnalyzer analyzer(dataset);
 	auto clusters = analyzer.clusterize();
