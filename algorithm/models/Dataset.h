@@ -30,8 +30,10 @@ public:
     double getCMinkowski();
     void setCMinkowski(double);
 
-	static auto readDatasetFile(std::string const& filename)->std::shared_ptr<Dataset>;
-
+	static auto readDatasetFile(std::string const& filename, std::vector<bool>& typeOfAttribute, double& alpha)->std::shared_ptr<Dataset>;
+	void readReferencePointFile(std::string const& filename, std::vector<bool>& typeOfAttribute);
+	double findMaxInAttributeColumn(int column, bool typeOfAttribute);
+	double findMinInAttributeColumn(int column, bool typeOfAttribute);
 private:
     Point referencePoint;
 	std::vector<std::shared_ptr<Point>> points;
