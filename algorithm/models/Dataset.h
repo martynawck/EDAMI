@@ -29,6 +29,10 @@ public:
     void setDistanceMeasure(int);
     double getCMinkowski();
     void setCMinkowski(double);
+	std::vector<bool> getTypeOfAttributes();
+	void setTypeOfAttributes(std::vector<bool>);
+	void setImportanceOfNominal(double);
+	double getImportanceOfNominal();
 
 	static auto readDatasetFile(std::string const& filename, std::vector<bool>& typeOfAttribute, double& alpha)->std::shared_ptr<Dataset>;
 	void readReferencePointFile(std::string const& filename, std::vector<bool>& typeOfAttribute);
@@ -39,6 +43,8 @@ private:
 	std::vector<std::shared_ptr<Point>> points;
     int distanceMeasure;
     double cMinkowski;
+	std::vector<bool> typeOfAttributes;
+	double importanceOfNominal;
  };
 
 

@@ -4,6 +4,7 @@
 
 #include <cmath>
 #include <algorithm>
+#include <iostream>
 #include "Cluster.h"
 #include "Point.h"
 
@@ -14,7 +15,7 @@ Point::Point() : Point(vector<double>(), 0)
 {
 }
 
-Point::Point (vector <double> v, int i): 
+Point::Point (vector <double> v, int i):
 	values(v), 
 	dist(0), 
 	epsilon(0), 
@@ -114,28 +115,45 @@ double Point::getEpsilon() {
 }
 
 
-double Point::calculateDistanceMeasure(Point const& point, int measure, double c) const {
+double Point::calculateDistanceMeasure(Point const& point, int measure, double c, std::vector<bool> attributeTypes, double importanceOfNominal) const {
 
     vector<double>::const_iterator itPoint = point.values.begin();
     double sum = 0;
     double result = 0;
+    int i = 0;
 
     switch (measure) {
         case 1:
             for (vector<double>::const_iterator it = values.begin(); it != values.end(); ++it) {
 
-                sum += pow((*it) - (*itPoint), 2.0);
+                if (attributeTypes.at(i) == 0) {
+                    sum += pow((*it) - (*itPoint), 2.0);
+                } else {
+                    if ((*it) == (*itPoint))
+                        sum += 0;
+                    else
+                        sum += importanceOfNominal;
+                }
                 ++itPoint;
+                ++i;
             }
             result = sqrt(sum);
             break;
         case 2:
             for (vector<double>::const_iterator it = values.begin(); it != values.end(); ++it) {
 
-                int res = (*it) - (*itPoint);
-                if (res < 0)
-                    res*=-1;
-                sum += res;
+                if (attributeTypes.at(i) == 0) {
+                    int res = (*it) - (*itPoint);
+                    if (res < 0)
+                        res *= -1;
+                    sum += res;
+                }  else {
+                    if ((*it) == (*itPoint))
+                        sum += 0;
+                    else
+                        sum += importanceOfNominal;
+                }
+                ++i;
                 ++itPoint;
             }
             result = sum;
@@ -143,10 +161,18 @@ double Point::calculateDistanceMeasure(Point const& point, int measure, double c
         case 3:
             for (vector<double>::const_iterator it = values.begin(); it != values.end(); ++it) {
 
-                int res = pow((*it) - (*itPoint), c);
-                if (res < 0)
-                    res*=-1;
-                sum += res;
+                if (attributeTypes.at(i) == 0) {
+                    int res = pow((*it) - (*itPoint), c);
+                    if (res < 0)
+                        res *= -1;
+                    sum += res;
+                }  else {
+                    if ((*it) == (*itPoint))
+                        sum += 0;
+                    else
+                        sum += importanceOfNominal;
+                }
+                ++i;
                 ++itPoint;
             }
             result = pow(sum, (1/c));

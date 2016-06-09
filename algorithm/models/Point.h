@@ -34,7 +34,7 @@ public:
     int getSizeOfKNeighbourhoodIndex () const;
     double getDistance() const;
     void setDistance(double);
-    double calculateDistanceMeasure(Point const&, int, double) const;
+    double calculateDistanceMeasure(Point const&, int, double, std::vector<bool>, double importanceOfNominal) const;
     double getEpsilon();
     void clearKNeighbourhood();
     void sortKNeighbours();

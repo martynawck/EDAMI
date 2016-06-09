@@ -86,6 +86,13 @@ void Dataset::sortPoints(){
     sort(points.begin(), points.end(), cmd);
 }
 
+std::vector<bool> Dataset::getTypeOfAttributes() {
+	return typeOfAttributes;
+}
+void Dataset::setTypeOfAttributes(std::vector<bool> attributes) {
+	typeOfAttributes = attributes;
+}
+
 void Dataset::calculateRefPointDistance() {
     vector<std::tuple<Point, double>> result;
 
@@ -94,7 +101,7 @@ void Dataset::calculateRefPointDistance() {
 //	referencePoint = Point(vector1,-1);
 	for (auto it = points.begin(); it != points.end(); ++it) {
 
-		double distance = referencePoint.calculateDistanceMeasure(**it, this->getDistanceMeasure(), this->getCMinkowski());
+		double distance = referencePoint.calculateDistanceMeasure(**it, this->getDistanceMeasure(), this->getCMinkowski(), this->getTypeOfAttributes(), this->getImportanceOfNominal());
 		it->get()->setDistanceFromReference(distance);
 
 	}
@@ -198,10 +205,8 @@ auto normalize(vector<vector<string>> data, vector<bool> & typeOfAttribute, doub
 					++nextValue;
 					mapOfNonNumericalAttributes.insert(std::pair<string,int>(std::to_string(column)+" "+s,nextValue));
 					oneRow.push_back(nextValue);
-					std::cout<<"NOT NUMBER"<<nextValue<<std::endl;
 				} else {
 					oneRow.push_back(it->second);
-					std::cout<<"NOT NUMBER"<<it->second<<std::endl;
 				}
 
 				if (i < vector.size())
@@ -226,13 +231,11 @@ auto normalize(vector<vector<string>> data, vector<bool> & typeOfAttribute, doub
 		magnitude = sqrt(magnitude);
 
 		column = 0;
-		//std::cout<<"NUMbER";
 		for (auto &value : oneRow) {
 			if (typeOfAttribute.at(column) == 0) {
 				value = value/magnitude * alpha;
 				if (value < 0)
 					value *= (-1);
-				std::cout<<"NUMBER"<<value<<std::endl;
 			}
 			++column;
 		}
@@ -283,11 +286,9 @@ void Dataset::readReferencePointFile(std::string const& filename, std::vector<bo
 
 	for (int i = 0; i < values.size(); i++) {
 		if (values.at(i) == "max" ) {
-			std::cout<<"MAX"<<findMaxInAttributeColumn(i, typeOfAttribute.at(i))<<std::endl;
 			refPointValues.push_back(findMaxInAttributeColumn(i, typeOfAttribute.at(i)));
 		}
 		else {
-			std::cout<<"MIN"<<findMinInAttributeColumn(i, typeOfAttribute.at(i))<<std::endl;
 			refPointValues.push_back(findMinInAttributeColumn(i, typeOfAttribute.at(i)));
 		}
 	}
@@ -365,7 +366,12 @@ double Dataset::findMinInAttributeColumn(int column, bool typeOfAttribute) {
 	return  minValue;
 }
 
-
+void Dataset::setImportanceOfNominal(double importance) {
+	importanceOfNominal = importance;
+}
+double Dataset::getImportanceOfNominal() {
+	return importanceOfNominal;
+}
 
 const Point& Dataset::getReferencePoint() const {
     return referencePoint;
