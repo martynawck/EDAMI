@@ -1,10 +1,14 @@
 #include <algorithm>
 #include <fstream>
 #include <iostream>
+//#include <rpcndr.h>
 #include "algorithm/models/Dataset.h"
 #include "algorithm/NBC.h"
 #include "algorithm/utils/config.h"
-#include "algorithm\neighbourhood.h"
+#include "algorithm/neighbourhood.h"
+//#include "algorithm\neighbourhood.h"
+#include "algorithm/models/Cluster.h"
+#include "algorithm/DataReader.h"
 
 
 using namespace std;
@@ -20,12 +24,15 @@ try {
 	auto dataset = Dataset::readDatasetFile(path, typeOfAttributes, alpha);
 	dataset->readReferencePointFile(path2,typeOfAttributes);
 	dataset->setDistanceMeasure(cfg.value<int> ("nbc.measure"));
-	
+	dataset->setTypeOfAttributes(typeOfAttributes);
+	dataset->setImportanceOfNominal(1);
+
 	NeighbourhoodAnalyzer analyzer(dataset);
-	analyzer.k(cfg.value<int>("nbc.k"));
+	analyzer.k(5);
+	//analyzer.k(cfg.value<int>("nbc.k"));
 	auto clusters = analyzer.clusterize();
 	for (auto const& cluster : clusters) {
-		cout << cluster.pretty_print();
+		cout<<cluster.pretty_print();
 	}
 
 	cin.sync();
