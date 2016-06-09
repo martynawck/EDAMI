@@ -20,12 +20,11 @@ try {
 	string path2 = cfg.value<string>("nbc.refpoint");
 
 	vector <bool> typeOfAttributes;
-	double alpha = 1;
-	auto dataset = Dataset::readDatasetFile(path, typeOfAttributes, alpha);
+	auto dataset = Dataset::readDatasetFile(path, typeOfAttributes, cfg.value<double> ("nbc.alpha"));
 	dataset->readReferencePointFile(path2,typeOfAttributes);
 	dataset->setDistanceMeasure(cfg.value<int> ("nbc.measure"));
 	dataset->setTypeOfAttributes(typeOfAttributes);
-	dataset->setImportanceOfNominal(1);
+	dataset->setImportanceOfNominal(cfg.value<double> ("nbc.nominalimportance"));
 
 	NeighbourhoodAnalyzer analyzer(dataset);
 	analyzer.k(5);
