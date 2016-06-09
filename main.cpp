@@ -13,8 +13,12 @@ int main()
 try {
 	Config cfg("edami.cfg");
 	string path = cfg.value<string>("nbc.dataset");
+	string path2 = cfg.value<string>("nbc.refpoint");
 
-	auto dataset = Dataset::readDatasetFile(path);
+	vector <bool> typeOfAttributes;
+	double alpha = 1;
+	auto dataset = Dataset::readDatasetFile(path, typeOfAttributes, alpha);
+	dataset->readReferencePointFile(path2,typeOfAttributes);
 	dataset->setDistanceMeasure(cfg.value<int> ("nbc.measure"));
 	
 	NeighbourhoodAnalyzer analyzer(dataset);
