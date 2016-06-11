@@ -122,7 +122,31 @@ double Point::calculateDistanceMeasure(Point const& point, int measure, double c
     double result = 0;
     int i = 0;
 
+	double num = 0;
+	double denA = 0;
+	double denB = 0;
     switch (measure) {
+		case 0:
+			for (vector<double>::const_iterator it = values.begin(); it != values.end(); ++it) {
+				if (attributeTypes.at(i) == 0) {
+					denA += pow(*it, 2.0);
+					denB += pow(*itPoint, 2.0);
+					num += (*it)*(*itPoint);
+				}
+				else {
+					if ((*it) == (*itPoint))
+						num += 0;
+					// etc
+					else
+						num += pow(importanceOfNominal, 2);
+						denA += pow(importanceOfNominal, 2);
+						denB += pow(importanceOfNominal, 2);
+				}
+				++itPoint;
+		 		++i;
+			}
+			result = num / (sqrt(denA)*sqrt(denB));
+			break;
         case 1:
             for (vector<double>::const_iterator it = values.begin(); it != values.end(); ++it) {
 

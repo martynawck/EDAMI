@@ -8,7 +8,7 @@
 #include "algorithm/neighbourhood.h"
 //#include "algorithm\neighbourhood.h"
 #include "algorithm/models/Cluster.h"
-#include "algorithm/DataReader.h"
+//#include "algorithm/DataReader.h"
 
 
 using namespace std;
@@ -18,9 +18,11 @@ try {
 	Config cfg("edami.cfg");
 	string path = cfg.value<string>("nbc.dataset");
 	string path2 = cfg.value<string>("nbc.refpoint");
+	double alpha = cfg.value<double>("nbc.alpha");
 
 	vector <bool> typeOfAttributes;
-	auto dataset = Dataset::readDatasetFile(path, typeOfAttributes, cfg.value<double> ("nbc.alpha"));
+
+	auto dataset = Dataset::readDatasetFile(path, typeOfAttributes, alpha);
 	dataset->readReferencePointFile(path2,typeOfAttributes);
 	dataset->setDistanceMeasure(cfg.value<int> ("nbc.measure"));
 	dataset->setTypeOfAttributes(typeOfAttributes);
