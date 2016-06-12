@@ -18,7 +18,11 @@ public:
 
     struct classcomp {
         bool operator() (std::shared_ptr<Point> const& lhs, std::shared_ptr<Point> const& rhs) const
-        {return lhs->getDistance() < rhs->getDistance();}
+        {
+			if (lhs->getDistance() == rhs->getDistance())
+				return lhs->getId()< rhs->getId();
+			return lhs->getDistance() < rhs->getDistance();
+		}
     };
 
 public:

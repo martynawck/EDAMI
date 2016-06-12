@@ -34,7 +34,7 @@ public:
 	void setImportanceOfNominal(double);
 	double getImportanceOfNominal();
 
-	static auto readDatasetFile(std::string const& filename, std::vector<bool>& typeOfAttribute, double& alpha)->std::shared_ptr<Dataset>;
+	static auto readDatasetFile(std::string const& filename, std::vector<bool>& typeOfAttribute, double alpha, int typeOfNormalization)->std::shared_ptr<Dataset>;
 	void readReferencePointFile(std::string const& filename, std::vector<bool>& typeOfAttribute);
 	double findMaxInAttributeColumn(int column, bool typeOfAttribute);
 	double findMinInAttributeColumn(int column, bool typeOfAttribute);
@@ -45,7 +45,9 @@ private:
     double cMinkowski;
 	std::vector<bool> typeOfAttributes;
 	double importanceOfNominal;
- };
+
+
+};
 
 
 #endif //EDAMI_DATASET_H

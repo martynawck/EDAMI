@@ -19,23 +19,6 @@ using std::string;
 using std::vector;
 using std::shared_ptr;
 
-
-vector<vector<double>> intoDoubles(vector<vector<string>> vec) {
-	vector<vector<double>> vectorx;
-	vector<vector<string>>::iterator it;
-	vector<string>::iterator it2;
-
-	for (it = vec.begin(); it != vec.end(); ++it) {
-		vector<double> vecd;
-		for (it2 = (*it).begin(); it2 != (*it).end(); ++it2) {
-			vecd.push_back(atof((*it2).c_str()));
-		}
-		vectorx.push_back(vecd);
-	}
-
-	return vectorx;
-}
-
 Dataset::Dataset(std::vector<std::shared_ptr<Point>> data): points(data), referencePoint(Point())
 {
 }
@@ -96,14 +79,10 @@ void Dataset::setTypeOfAttributes(std::vector<bool> attributes) {
 void Dataset::calculateRefPointDistance() {
     vector<std::tuple<Point, double>> result;
 
-	// HARD CODED REFERENCE POINT
-//	vector <double> vector1 (2, 0.0);
-//	referencePoint = Point(vector1,-1);
 	for (auto it = points.begin(); it != points.end(); ++it) {
 
 		double distance = referencePoint.calculateDistanceMeasure(**it, this->getDistanceMeasure(), this->getCMinkowski(), this->getTypeOfAttributes(), this->getImportanceOfNominal());
 		it->get()->setDistanceFromReference(distance);
-
 	}
 }
 
@@ -115,27 +94,72 @@ void Dataset::setCMinkowski(double c) {
     this->cMinkowski = c;
 }
 
-/*
-auto Dataset::readDatasetFile(string const& filename) -> std::shared_ptr<Dataset>
-{
-	std::vector<std::vector<string> > values;
-	std::ifstream fin(filename);
-	for (std::string line; std::getline(fin, line); ) {
-		std::replace(line.begin(), line.end(), ',', ' ');
-		std::istringstream in(line);
-		values.push_back(
-			std::vector<string>(std::istream_iterator<string>(in),
-				std::istream_iterator<string>()));
-	}
+double Dataset::findMaxInAttributeColumn(int column, bool typeOfAttribute) {
 
-	int i = 1;
-	vector<std::shared_ptr<Point>> points;
-	for (auto const& it: intoDoubles(values)) {
-		points.push_back(std::shared_ptr<Point>(new Point(it, i++)));
+	double maxValue = -DBL_MAX;
+
+	if (typeOfAttribute == 0) {
+		for (auto point: points) {
+			if (point->getAttributes().at(column) > maxValue) {
+				maxValue = point->getAttributes().at(column);
+			}
+		}
+	} else {
+		map <double, int> frequencyMap;
+
+		for (auto point: points) {
+			std::map<double,int>::iterator it = frequencyMap.find(point->getAttributes().at(column));
+			if (it == frequencyMap.end()) {
+				frequencyMap.insert(std::pair<double,int>(point->getAttributes().at(column),1));
+			} else {
+				frequencyMap[point->getAttributes().at(column)] +=1;
+			}
+		}
+
+		double maxFrequency = 0;
+		for(auto iter = frequencyMap.begin(); iter != frequencyMap.end(); ++iter) {
+			if (iter->second > maxFrequency) {
+				maxFrequency = iter->second;
+				maxValue = iter->first;
+			}
+		}
 	}
-	return std::shared_ptr<Dataset>(new Dataset(points));
+	return  maxValue;
 }
-*/
+
+
+double Dataset::findMinInAttributeColumn(int column, bool typeOfAttribute) {
+
+	double minValue = DBL_MAX;
+
+	if (typeOfAttribute == 0) {
+		for (auto point: points) {
+			if (point->getAttributes().at(column) < minValue) {
+				minValue = point->getAttributes().at(column);
+			}
+		}
+	} else {
+		map <double, int> frequencyMap;
+
+		for (auto point: points) {
+			std::map<double,int>::iterator it = frequencyMap.find(point->getAttributes().at(column));
+			if (it == frequencyMap.end()) {
+				frequencyMap.insert(std::pair<double,int>(point->getAttributes().at(column),1));
+			} else {
+				frequencyMap[point->getAttributes().at(column)] +=1;
+			}
+		}
+
+		double minFrequency = 0;
+		for(auto iter = frequencyMap.begin(); iter != frequencyMap.end(); ++iter) {
+			if (iter->second < minFrequency) {
+				minFrequency = iter->second;
+				minValue = iter->first;
+			}
+		}
+	}
+	return  minValue;
+}
 
 
 bool isNumeric(const std::string& input) {
@@ -150,12 +174,11 @@ vector<string> split(string str, char delimiter) {
 	while(getline(ss, tok, delimiter)) {
 		internal.push_back(tok);
 	}
-
 	return internal;
 }
 
-
-auto normalize(vector<vector<string>> data, vector<bool> & typeOfAttribute, double &alpha) {
+// changes non numerical into numerical and everything into doubles
+auto preNormalize(vector<vector<string>> data, vector<bool> & typeOfAttribute) {
 	int numberOfItems = 0;
 	//vector<shared_ptr<Point>> points;
 	vector<vector<double>> points;
@@ -165,11 +188,8 @@ auto normalize(vector<vector<string>> data, vector<bool> & typeOfAttribute, doub
 	int i = 0;
 
 	for (vector<string> vector : data) {
-
 		oneRow.clear();
-
 		int column = 0;
-
 		// for each string
 		for (string s : vector) {
 			// if string is a number then
@@ -215,43 +235,139 @@ auto normalize(vector<vector<string>> data, vector<bool> & typeOfAttribute, doub
 			i++;
 			column++;
 		}
+		points.push_back(oneRow);
+		++numberOfItems;
+	}
+	return points;
+
+}
+
+void rangeNormalization(vector<vector<double>>& data, vector<bool> typeOfAttributes){
+
+	int size = typeOfAttributes.size();
+	double mins [size];
+	double maxs [size];
+	std::fill_n(mins, size, DBL_MAX);
+	std::fill_n(maxs, size, -DBL_MAX);
+
+	for (auto row : data) {
+		int i = 0;
+		for (auto d : row) {
+			if (d < mins[i])
+				mins[i] = d;
+			if (d > maxs[i]) {
+				maxs[i] = d;
+			}
+			++i;
+		}
+	}
+
+	for (auto &row: data) {
+		int i = 0;
+		for (auto &val : row) {
+			if (typeOfAttributes.at(i) == 0)
+				val = (val - mins[i]) / (maxs[i] - mins[i]);
+			++i;
+		}
+	}
+
+}
+
+void z_scoreNormalization(vector<vector<double>>& data, vector<bool> typeOfAttributes) {
+
+	int size = typeOfAttributes.size();
+	double u [size];
+	double S [size];
+	std::fill_n(u, size, 0);
+	std::fill_n(S, size, 0);
+
+	for (auto row : data) {
+		int i = 0;
+		for (auto d : row) {
+			if (typeOfAttributes.at(i) == 0)
+				u[i]+=d;
+			++i;
+		}
+	}
+
+	for (double &d : u) {
+		d = d / data.size();
+	}
+
+	for (auto row : data) {
+		int i = 0;
+		for (auto d : row) {
+			if (typeOfAttributes.at(i) == 0) {
+				double val = d - u[i];
+				if (val < 0)
+					val *= (-1);
+				S[i]+=val;
+			}
+			++i;
+		}
+	}
+
+	for (double &d : S) {
+		d = d / data.size();
+	}
+
+	for (auto& row : data) {
+		int i = 0;
+		for (auto& d : row) {
+			if (typeOfAttributes[i] == 0)
+				d = (d - u[i]) / S[i];
+			++i;
+		}
+	}
+}
 
 
-		column = 0;
 
+void cosineNormalization(vector<vector<double>>& data, vector<bool> typeOfAttributes,double& alpha){
+	int column = 0;
+
+	for (auto &point : data) {
 		double magnitude = 0;
-		for (auto value : oneRow) {
-			if (typeOfAttribute.at(column) == 0) {
+
+		for (auto value : point) {
+			if (typeOfAttributes.at(column) == 0) {
 				magnitude += value*value;
 			}
-
 			++column;
 		}
 
 		magnitude = sqrt(magnitude);
 
 		column = 0;
-		for (auto &value : oneRow) {
-			if (typeOfAttribute.at(column) == 0) {
-				value = value/magnitude * alpha;
-				if (value < 0)
-					value *= (-1);
+		for (auto &value : point) {
+			if (typeOfAttributes.at(column) == 0) {
+				value = (value/magnitude) * alpha;
 			}
 			++column;
 		}
 
-	//	std::shared_ptr<Point> point = Point(oneRow,numberOfItems);
-		points.push_back(oneRow);
-
-		++numberOfItems;
+		column = 0;
 	}
-
-
-	return points;
-
+	int i =0;
 }
 
-auto Dataset::readDatasetFile(string const& filename, vector<bool>& typeOfAttribute, double& alpha) -> std::shared_ptr<Dataset>
+void normalize(vector<vector<double>> &data, double& alpha, vector<bool>& typeOfAttribute, int normalizationType) {
+	switch(normalizationType) {
+		case 0:
+			break;
+		case 1:
+			rangeNormalization(data, typeOfAttribute);
+			break;
+		case 2:
+			z_scoreNormalization(data, typeOfAttribute);
+			break;
+		case 3:
+			cosineNormalization(data, typeOfAttribute,alpha);
+			break;
+	}
+}
+
+auto Dataset::readDatasetFile(string const& filename, vector<bool>& typeOfAttribute, double alpha, int typeOfNormalization) -> std::shared_ptr<Dataset>
 {
 	std::vector<std::vector<string> > values;
 	std::ifstream fin(filename);
@@ -266,11 +382,17 @@ auto Dataset::readDatasetFile(string const& filename, vector<bool>& typeOfAttrib
 
 	int i = 1;
 	vector<std::shared_ptr<Point>> points;
-	for (auto const& it: normalize(values, typeOfAttribute, alpha)) {
+
+
+	auto data = preNormalize(values, typeOfAttribute);
+	normalize(data, alpha, typeOfAttribute, typeOfNormalization);
+
+	for (auto const& it: data){
 		points.push_back(std::shared_ptr<Point>(new Point(it, i++)));
 	}
 	return std::shared_ptr<Dataset>(new Dataset(points));
 }
+
 
 
 void Dataset::readReferencePointFile(std::string const& filename, std::vector<bool>& typeOfAttribute) {
@@ -292,79 +414,10 @@ void Dataset::readReferencePointFile(std::string const& filename, std::vector<bo
 			refPointValues.push_back(findMinInAttributeColumn(i, typeOfAttribute.at(i)));
 		}
 	}
-
 	setReferencePoint(Point(refPointValues, -1));
-	//return values;
-}
-
-double Dataset::findMaxInAttributeColumn(int column, bool typeOfAttribute) {
-
-	double maxValue = -DBL_MAX;
-
-	if (typeOfAttribute == 0) {
-		for (auto point: points) {
-			if (point->getAttributes().at(column) > maxValue) {
-				maxValue = point->getAttributes().at(column);
-			}
-		}
-	} else {
-		map <double, int> frequencyMap;
-
-		for (auto point: points) {
-			std::map<double,int>::iterator it = frequencyMap.find(point->getAttributes().at(column));
-			if (it == frequencyMap.end()) {
-				frequencyMap.insert(std::pair<double,int>(point->getAttributes().at(column),1));
-			} else {
-				frequencyMap[point->getAttributes().at(column)] +=1;
-			}
-		}
-
-		double maxFrequency = 0;
-		for(auto iter = frequencyMap.begin(); iter != frequencyMap.end(); ++iter) {
-			if (iter->second > maxFrequency) {
-				maxFrequency = iter->second;
-				maxValue = iter->first;
-			}
-		}
-
-	}
-	return  maxValue;
 }
 
 
-double Dataset::findMinInAttributeColumn(int column, bool typeOfAttribute) {
-
-	double minValue = DBL_MAX;
-
-	if (typeOfAttribute == 0) {
-		for (auto point: points) {
-			if (point->getAttributes().at(column) < minValue) {
-				minValue = point->getAttributes().at(column);
-			}
-		}
-	} else {
-		map <double, int> frequencyMap;
-
-		for (auto point: points) {
-			std::map<double,int>::iterator it = frequencyMap.find(point->getAttributes().at(column));
-			if (it == frequencyMap.end()) {
-				frequencyMap.insert(std::pair<double,int>(point->getAttributes().at(column),1));
-			} else {
-				frequencyMap[point->getAttributes().at(column)] +=1;
-			}
-		}
-
-		double minFrequency = 0;
-		for(auto iter = frequencyMap.begin(); iter != frequencyMap.end(); ++iter) {
-			if (iter->second < minFrequency) {
-				minFrequency = iter->second;
-				minValue = iter->first;
-			}
-		}
-
-	}
-	return  minValue;
-}
 
 void Dataset::setImportanceOfNominal(double importance) {
 	importanceOfNominal = importance;

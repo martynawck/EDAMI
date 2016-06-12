@@ -59,7 +59,6 @@ void Find_First_k_Candidate_Neighbours_Forward (Dataset dataset, shared_ptr<Poin
 
 void Verify_k_Candidate_Neighbours_Backward(Dataset dataset, shared_ptr<Point> &p, shared_ptr<Point>& b, bool& backwardSearch,
                                                  std::set<shared_ptr<Point>, Point::classcomp>& k_Neighbourhood, int k){
-
     while (backwardSearch && (p->getDistanceFromReference() - b->getDistanceFromReference() <= p->getEpsilon())) {
         double distance = b->calculateDistanceMeasure(*p, dataset.getDistanceMeasure(), dataset.getCMinkowski(),dataset.getTypeOfAttributes(), dataset.getImportanceOfNominal());
         
@@ -98,7 +97,7 @@ void Verify_k_Candidate_Neighbours_Backward(Dataset dataset, shared_ptr<Point> &
                 e->setDistance(distance);
                 k_Neighbourhood.insert(e);
             }
-        } else if(distance - p->getEpsilon() < MIN_DIFFERENCE) {
+        } else if(abs(distance - p->getEpsilon()) < MIN_DIFFERENCE) {
             auto e = b;
             e->setDistance(distance);
 
@@ -110,6 +109,7 @@ void Verify_k_Candidate_Neighbours_Backward(Dataset dataset, shared_ptr<Point> &
 
 void Verify_k_Candidate_Neihbours_Forward(Dataset dataset, shared_ptr<Point>& p, shared_ptr<Point>& f, bool& forwardSearch,
                                                std::set<std::shared_ptr<Point>, Point::classcomp>& k_Neighbourhood, int k) {
+
     while (forwardSearch && (f->getDistanceFromReference() - p->getDistanceFromReference() <= p->getEpsilon())) {
         double distance = f->calculateDistanceMeasure(*p, dataset.getDistanceMeasure(), dataset.getCMinkowski(),dataset.getTypeOfAttributes(), dataset.getImportanceOfNominal());
         if (distance < p->getEpsilon()) {
@@ -122,7 +122,7 @@ void Verify_k_Candidate_Neihbours_Forward(Dataset dataset, shared_ptr<Point>& p,
             if (k_Neighbourhood.size() - i >= k - 1) {
 
 
-                for (auto it = k_Neighbourhood.begin(); it!= k_Neighbourhood.end(); ) {
+                for (auto it = k_Neighbourhood.begin(); it != k_Neighbourhood.end();) {
                     if (p->getEpsilon() == (*it)->getDistance()) {
                         it = k_Neighbourhood.erase(it);
                     }
@@ -134,16 +134,22 @@ void Verify_k_Candidate_Neihbours_Forward(Dataset dataset, shared_ptr<Point>& p,
                 e->setDistance(distance);
                 k_Neighbourhood.insert(e);
 
-                p->setEpsilon(p->calculateDistanceMeasure(**(--k_Neighbourhood.end()), 
-					dataset.getDistanceMeasure(), dataset.getCMinkowski(),dataset.getTypeOfAttributes(), dataset.getImportanceOfNominal()));
+                p->setEpsilon(p->calculateDistanceMeasure(**(--k_Neighbourhood.end()),
+                                                          dataset.getDistanceMeasure(), dataset.getCMinkowski(),
+                                                          dataset.getTypeOfAttributes(),
+                                                          dataset.getImportanceOfNominal()));
             } else {
 
                 auto e = f;
                 e->setDistance(distance);
                 k_Neighbourhood.insert(e);
             }
-        } else if(abs(distance - p->getEpsilon()) < MIN_DIFFERENCE) {
+            } else if(abs(distance - p->getEpsilon()) < MIN_DIFFERENCE) {
 
+            double dist = 0;
+            for (auto p: k_Neighbourhood) {
+                dist = p->getDistance();
+            }
             auto e = f;
             e->setDistance(distance);
             k_Neighbourhood.insert(e);
@@ -188,7 +194,7 @@ vector<shared_ptr<Point>> TI_k_Neighbourhood_Index(Dataset& dataset, int k) {
     // sort points in non decreasing order
     int i=0;
     // for each point in the dataset
-   for (auto point: dataset.getPoints()) {
+    for (auto point: dataset.getPoints()) {
        try {
 
            // insert this set into its neighbourhood list
@@ -198,13 +204,15 @@ vector<shared_ptr<Point>> TI_k_Neighbourhood_Index(Dataset& dataset, int k) {
 		   for (auto neighbour: neighbours) {
 			   neighbour->appendReverseNeighbour(point);
 		   }
+
        } catch (std::exception e) {
            std::cout << e.what() << std::endl;
        }
 
        ++i;
    }
-    std::cout << std::endl;
 
+    for (auto point: dataset.getPoints()) {
+    }
 	return dataset.getPoints();
 }
