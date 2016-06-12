@@ -50,4 +50,9 @@ try {
 
     return 0;
 
+}catch (exception& ex) {
+	cout << ex.what() << endl;
+	cin.sync();
+	cin.get();
+	return -1;
 }
