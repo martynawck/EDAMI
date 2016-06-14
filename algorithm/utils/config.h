@@ -6,7 +6,7 @@
 //#include "simpleini.h"
 
 class Config {
-	/*
+	
 private:
 	std::map<std::string, std::string> values;
 public:
@@ -17,5 +17,5 @@ public:
 	template<> double value<double>(std::string const& name) { return atof(read(name)); }
 	template<> std::string value<std::string>(std::string const& name) { return std::string(read(name)); }
 private:
-	const char* read(std::string const& name);*/
+	const char* read(std::string const& name);
 };

@@ -246,10 +246,8 @@ auto preNormalize(vector<vector<string>> data, vector<bool> & typeOfAttribute) {
 void rangeNormalization(vector<vector<double>>& data, vector<bool> typeOfAttributes){
 
 	int size = typeOfAttributes.size();
-	double mins [size];
-	double maxs [size];
-	std::fill_n(mins, size, DBL_MAX);
-	std::fill_n(maxs, size, -DBL_MAX);
+	vector<double> mins(size, DBL_MAX);
+	vector<double> maxs(size, -DBL_MAX);
 
 	for (auto row : data) {
 		int i = 0;
@@ -277,10 +275,8 @@ void rangeNormalization(vector<vector<double>>& data, vector<bool> typeOfAttribu
 void z_scoreNormalization(vector<vector<double>>& data, vector<bool> typeOfAttributes) {
 
 	int size = typeOfAttributes.size();
-	double u [size];
-	double S [size];
-	std::fill_n(u, size, 0);
-	std::fill_n(S, size, 0);
+	vector<double> u(size, 0);
+	vector<double> S(size, 0);
 
 	for (auto row : data) {
 		int i = 0;
