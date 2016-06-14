@@ -17,7 +17,6 @@ NeighbourhoodAnalyzer::NeighbourhoodAnalyzer(std::shared_ptr<Dataset> data): dat
 auto NeighbourhoodAnalyzer::clusterize() -> vector<Cluster>
 {
 	auto points = annotated_points();
-	std::cout<<"after TI NBC"<<std::endl;
 	vector<Cluster> clusters;
 
 	for (auto point: points) {

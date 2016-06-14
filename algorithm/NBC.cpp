@@ -214,11 +214,7 @@ vector<shared_ptr<Point>> TI_k_Neighbourhood_Index(Dataset& dataset, int k) {
        } catch (std::exception e) {
            std::cout << e.what() << std::endl;
        }
+	}
 
-       ++i;
-   }
-
-    for (auto point: dataset.getPoints()) {
-    }
 	return dataset.getPoints();
 }
