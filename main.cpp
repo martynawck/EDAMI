@@ -25,23 +25,19 @@ try {
 	vector <bool> typeOfAttributes;
 	// NORMALIZATION -> 0 - nop, 1 - range, 2 - z_score, 3 - euclidean
 	int normalization = cfg.value<int>("nbc.normalization");;
-
 	auto dataset = Dataset::readDatasetFile(path, typeOfAttributes, alpha, normalization);
 
 	dataset->setTypeOfAttributes(typeOfAttributes);
-	cout <<"datasize"<<dataset->getPoints().size()<<endl;
 	dataset->readReferencePointFile(path2,typeOfAttributes);
 	dataset->setDistanceMeasure(2);
 	dataset->setImportanceOfNominal(cfg.value<double>("nbc.nominalimportance"));
 
-	cout << "BEGIN"<<endl;
 	const time_t begin_time = clock();
 	NeighbourhoodAnalyzer analyzer(dataset);
 	//analyzer.k(10);
-	cout<<"CLUSTERIZE"<<endl;
 	analyzer.k(cfg.value<int>("nbc.k"));
 	auto clusters = analyzer.clusterize();
-	cout << "TTIME  "<< float(clock() - begin_time) / CLOCKS_PER_SEC << endl<<endl;
+	cout << "TIME  "<< float(clock() - begin_time) / CLOCKS_PER_SEC << endl<<endl;
 	cout << "Cluster count " << clusters.size() << endl;
 	for (auto const& cluster : clusters) {
 		cout<<cluster.pretty_print();
