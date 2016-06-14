@@ -54,7 +54,8 @@ bool Dataset::PrecedingPoint(shared_ptr<Point>& point) const {
 
 bool Dataset::FollowingPoint(std::shared_ptr<Point>& point) const {
     auto it = find(points.begin(), points.end(), point);
-    if (it != (points.end()-1)) {
+	auto end = --points.end();
+    if (it != end) {
         point = *(++it);
         return true;
     }
@@ -62,7 +63,7 @@ bool Dataset::FollowingPoint(std::shared_ptr<Point>& point) const {
 }
 
 bool cmd(shared_ptr<Point> p1, shared_ptr<Point> p2) {
-    return p1->getDistance() < p2->getDistance();
+    return p1->getDistanceFromReference() < p2->getDistanceFromReference();
 }
 
 void Dataset::sortPoints(){

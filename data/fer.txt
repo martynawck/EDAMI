@@ -1,0 +1,45 @@
+linear 
+
+wszystkie atrybuty [1] 12115.44 k = 5 (po 20%)
+
+bez workingday 12111.81
+
+bez weather 12282.62
+
+bez temp 12136.79
+
+bez atemp 12128.43
+
+bez humidity 12329.15
+
+bez day 12130.86
+
+bez weekend 12115.44
+
+bez hour 18134.77
+
+bez month 12804.84
+
+bez daypart 12115.44
+
+regresja
+
+wszystko  6286.168
+
+bez working day 6578.205
+
+bez weather 6552.113
+
+bez temp 6264.508
+
+bez atem 6200.234
+
+bez humidity 6562.511
+
+bez day 6363.678
+
+bez hour 15565
+
+bez monty 6757.023
+
+bez daypart 6347.26

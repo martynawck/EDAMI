@@ -1,7 +1,9 @@
 #include <stack>
+#include <iostream>
 #include "neighbourhood.h"
-#include "models\Point.h"
+#include "models/Point.h"
 #include "NBC.h"
+#include "models/Cluster.h"
 
 using std::set;
 using std::vector;
@@ -15,6 +17,7 @@ NeighbourhoodAnalyzer::NeighbourhoodAnalyzer(std::shared_ptr<Dataset> data): dat
 auto NeighbourhoodAnalyzer::clusterize() -> vector<Cluster>
 {
 	auto points = annotated_points();
+	std::cout<<"after TI NBC"<<std::endl;
 	vector<Cluster> clusters;
 
 	for (auto point: points) {

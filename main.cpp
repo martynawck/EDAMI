@@ -24,12 +24,13 @@ try {
 	vector <bool> typeOfAttributes;
 	double alpha = 1;
 	// NORMALIZATION -> 0 - nop, 1 - range, 2 - z_score, 3 - euclidean
-	int normalization = 1;
+	int normalization = 0;
 	string path = "C:\\Users\\Martyna\\git\\OSTATECZNE_EDAMI\\data\\birch.txt";
 	string path2 = "C:\\Users\\Martyna\\git\\OSTATECZNE_EDAMI\\data\\refPointBirch.txt";
 	auto dataset = Dataset::readDatasetFile(path, typeOfAttributes, alpha, normalization);
 
 	dataset->setTypeOfAttributes(typeOfAttributes);
+	cout <<"datasieze"<<dataset->getPoints().size()<<endl;
 	dataset->readReferencePointFile(path2,typeOfAttributes);
 	dataset->setDistanceMeasure(2);
 	dataset->setImportanceOfNominal(1.0);
@@ -37,7 +38,8 @@ try {
 	cout << "BEGIN"<<endl;
 	const time_t begin_time = clock();
 	NeighbourhoodAnalyzer analyzer(dataset);
-	analyzer.k(3);
+	analyzer.k(10);
+	cout<<"CLUSTERIZE"<<endl;
 	//analyzer.k(cfg.value<int>("nbc.k"));
 	auto clusters = analyzer.clusterize();
 	cout << "TTIME  "<< float(clock() - begin_time) / CLOCKS_PER_SEC << endl<<endl;
@@ -50,4 +52,10 @@ try {
 
     return 0;
 
+}
+catch (exception& ex) {
+	cout << ex.what() << endl;
+	cin.sync();
+	cin.get();
+	return -1;
 }

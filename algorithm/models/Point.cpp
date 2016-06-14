@@ -40,7 +40,7 @@ void Point::setAttributes (vector <double> values ) {
     this->values = values;
 }
 
-std::set<shared_ptr<Point>, Point::classcomp> Point::getKNeighbourhoodIndex()  {
+std::vector<shared_ptr<Point>> Point::getKNeighbourhoodIndex()  {
     return kNeighbourhoodIndex;
 }
 
@@ -48,19 +48,20 @@ void Point::addPointToKNeighbourhoodIndex(shared_ptr<Point> p) {
 
     auto p1 = p;
     p1->clearKNeighbourhood();
-    kNeighbourhoodIndex.insert(p1);
+    kNeighbourhoodIndex.push_back(p1);
 }
 
 void Point::appendReverseNeighbour(shared_ptr<Point> point)
 {
-	reverseNeighbourhood.insert(point);
+	reverseNeighbourhood.push_back(point);
 }
 
 void Point::clearKNeighbourhood() {
     this->kNeighbourhoodIndex.clear();
 }
 void Point::deletePointFromKNeighbourhoodIndex(shared_ptr<Point> p) {
-    auto it = kNeighbourhoodIndex.find(p);
+   // auto it = kNeighbourhoodIndex.find(p);
+    auto it = find(kNeighbourhoodIndex.begin(), kNeighbourhoodIndex.end(), p);
     if (it != kNeighbourhoodIndex.end())
         kNeighbourhoodIndex.erase(it);
 }
@@ -102,7 +103,7 @@ void Point::setDistance(double distance) {
     this->dist = distance;
 }
 
-void Point::setKNeighbourhoodIndex(std::set<shared_ptr<Point>, classcomp> kNeighbourhoodIndex) {
+void Point::setKNeighbourhoodIndex(std::vector<shared_ptr<Point>> kNeighbourhoodIndex) {
     this->kNeighbourhoodIndex = kNeighbourhoodIndex;
 }
 

@@ -15,7 +15,7 @@ class Cluster;
 class Point {
 
 public:
-
+/*
     struct classcomp {
         bool operator() (std::shared_ptr<Point> const& lhs, std::shared_ptr<Point> const& rhs) const
         {
@@ -23,15 +23,15 @@ public:
 				return lhs->getId()< rhs->getId();
 			return lhs->getDistance() < rhs->getDistance();
 		}
-    };
+    };*/
 
 public:
 	Point();
     Point(std::vector<double>, int=0);
     std::vector<double> getAttributes() const;
     void setAttributes (std::vector <double> );
-    std::set<std::shared_ptr<Point>, classcomp> getKNeighbourhoodIndex();
-    void setKNeighbourhoodIndex(std::set<std::shared_ptr<Point>, classcomp>);
+    std::vector<std::shared_ptr<Point>> getKNeighbourhoodIndex();
+    void setKNeighbourhoodIndex(std::vector<std::shared_ptr<Point>>);
     void addPointToKNeighbourhoodIndex(std::shared_ptr<Point>);
 	void appendReverseNeighbour(std::shared_ptr<Point>);
     void deletePointFromKNeighbourhoodIndex(std::shared_ptr<Point>);
@@ -62,8 +62,8 @@ public:
 	}
 
 private:
-    std::set<std::shared_ptr<Point>, classcomp> kNeighbourhoodIndex;
-	std::set<std::shared_ptr<Point>, classcomp> reverseNeighbourhood;
+    std::vector<std::shared_ptr<Point>> kNeighbourhoodIndex;
+	std::vector<std::shared_ptr<Point>> reverseNeighbourhood;
 
     std::vector<double> values;
     double dist;
